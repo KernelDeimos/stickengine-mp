@@ -1,0 +1,9 @@
+# External libraries
+node_modules/ 
+
+# Generated sources
+processed/
+public/bundle.js
+
+# ./bun script garbage
+source/placeholder.js

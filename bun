@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# This file bundles the client-side JavaScript using browserify.
+# It's called "bun" because that's faster to type than "bundle".
+
+# Make ./processed if it doesn't exist
+mkdir -p ./processed
+echo "// Bundler complains without this file" > ./source/placeholder.js
+
+# Compile CoffeeScript source
+echo "[1] Processing CoffeeScript files"
+coffee --compile --output processed/ source/
+# Move over any JavaScript source
+echo "[2] Copying pure source"
+cd source
+cp --parents `find -name \*.js` ../processed/
+cd ..
+echo "[3] Deploying client code to ./public/bundle.js"
+# Bundle using browserify
+browserify ./processed/client.js -o ./public/bundle.js
+echo "[Done]"
