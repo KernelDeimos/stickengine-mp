@@ -1,3 +1,4 @@
+Matter = require "matter-js"
 BaseEntity = require "./BaseEntity"
 
 module.exports = class extends BaseEntity
@@ -16,10 +17,10 @@ module.exports = class extends BaseEntity
 		@move walkAmount, 0
 
 	move: (x, y) ->
-		Body.translate(@body, {x:x,y:y})
+		Matter.Body.translate(@body, {x:x,y:y})
 
 	jump: () ->
-		Body.setVelocity(@body, {x:0,y:-1*@jumpVelocity})
+		Matter.Body.setVelocity(@body, {x:0,y:-1*@jumpVelocity})
 
 	# @param [String] direction  'left', 'right', or 'stop'
 	walk: (direction) ->

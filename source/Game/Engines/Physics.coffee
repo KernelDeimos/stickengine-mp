@@ -2,12 +2,10 @@ Matter = require "matter-js"
 Context = require "../Context"
 
 module.exports = class
-	constructor: (@context, @stage) ->
+	constructor: () ->
 		@engine = Matter.Engine.create()
 
 		@last_ms = 0 # Last tick for physics engine
-
-		@_bind()
 
 	_bind: () ->
 		self = @
@@ -16,7 +14,7 @@ module.exports = class
 		Matter.Events.on @engine, 'beforeUpdate', (ev) ->
 			# Calculate time difference
 			ms = ev.timestamp
-			remtaT = ms - self.last_ms
+			deltaT = ms - self.last_ms
 			self.last_ms = ms
 			# Update stage (and thus, all entities)
 			self.stage.update(deltaT)
@@ -36,7 +34,9 @@ module.exports = class
 	rem_body: (body) ->
 		Matter.World.remove @engine.world, [body]
 
-	activate: () ->
+	activate: (@context, @stage) ->
+		@_bind()
+		
 		# Use default runner for client
 		if @context.env is Context.ENV_CLIENT
 			Matter.Engine.run(@engine)

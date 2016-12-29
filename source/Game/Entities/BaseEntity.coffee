@@ -1,5 +1,5 @@
 Body = (require "matter-js").Body # For body transformations
-Lib = require "../Lib" # For serializing body
+Lib = require "../../Lib" # For serializing body
 
 module.exports = class
 
@@ -15,6 +15,10 @@ module.exports = class
 			Body.setPosition(@body, {x:x,y:y})
 
 	get_position: () -> @body.position
+
+	get_renderable: () ->
+		renderable =
+			render: () -> # do nothing
 
 	# Serialize enough entity data to recreate on client
 	serialize: () ->

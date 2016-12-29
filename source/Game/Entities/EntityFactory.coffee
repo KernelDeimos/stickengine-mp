@@ -1,6 +1,13 @@
+uuid = require 'node-uuid'
+
 module.exports = class
 	constructor: () ->
 		@subfactories = {}
+
+	register_entity: (type, factory) ->
+		@subfactories[type] = factory
+		return null
+
 	make: (type, id, props={}) ->
 		# If the entity was passed from the server, it has
 		# an ID already, but if we're adding a new entity

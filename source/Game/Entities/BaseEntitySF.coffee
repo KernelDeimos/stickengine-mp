@@ -14,5 +14,5 @@ module.exports = class
 		if @context.env == Context.ENV_CLIENT
 			@make_client(id, props)
 
-	make_client: () -> throw new Error "No implementation for make_client"
-	make_server: () -> throw new Error "No implementation for make_server"
+	make_client: (id, props) -> throw new Error "No implementation for make_client"
+	make_server: (id, props) -> throw new Error "No implementation for make_server"
