@@ -37,6 +37,9 @@ module.exports = class
 		@game.install_module serversync
 		serversync.activate()
 
+		# Expose keyboard for enable and disable functions
+		@keyboard = keyboard
+
 		@_poll_inputs keyboard, player
 
 	do_test: () ->
@@ -47,6 +50,9 @@ module.exports = class
 			h: 20
 
 	get_console: () -> return @userconsole
+
+	ignore_inputs: () -> @keyboard.disable()
+	accept_inputs: () -> @keyboard.enable()
 
 	_poll_inputs: (keyboard, player) ->
 
