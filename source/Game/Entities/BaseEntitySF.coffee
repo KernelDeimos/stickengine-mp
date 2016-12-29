@@ -10,9 +10,9 @@ module.exports = class
 	# param [Object] params  an object describing entity properties
 	make: (id, props) ->
 		if @context.env == Context.ENV_SERVER
-			@make_server(id, props)
+			return @make_server(id, props)
 		if @context.env == Context.ENV_CLIENT
-			@make_client(id, props)
+			return @make_client(id, props)
 
 	make_client: (id, props) -> throw new Error "No implementation for make_client"
 	make_server: (id, props) -> throw new Error "No implementation for make_server"

@@ -16,3 +16,6 @@ module.exports = class
 	add_entity: (type, props) ->
 		entity = @entities.make type, null, props
 		@stage.add_entity entity
+		return entity
+
+	get_entities: () -> @stage.get_entities()

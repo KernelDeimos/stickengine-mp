@@ -24,3 +24,10 @@ module.exports = class
 
 		# If no appropriate factory, raise error
 		throw new Error "Entity of type '"+type+"' does not exist!"
+
+	deserialize: (data) ->
+		console.log "Making a new " + data.type + " from server!"
+		entity = @make(data.type, data.uuid, data.props)
+		# entity.set_position data.position
+		console.log entity
+		return entity

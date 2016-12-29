@@ -30,10 +30,6 @@ module.exports = class
 			renderable = entity.get_renderable()
 			self._add_renderable renderable
 
-		@stage.on 'stage.add_platform', (entity) ->
-			renderable = entity.get_renderable()
-			self._add_renderable renderable
-
 	_add_renderable: (renderable) ->
 		@renderables.push renderable
 

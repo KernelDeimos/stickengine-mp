@@ -8,9 +8,7 @@ domready(
 		canvas = document.getElementById('tester')
 
 		# Connect to server
-		# ws = new WebSocket 'ws://127.0.0.1:8231'
-		# ws = new WebSocket 'ws://135.23.32.56:8232'
-		ws = null
+		ws = new WebSocket 'ws://127.0.0.1:8232'
 
 		game = new Client canvas, ws
 

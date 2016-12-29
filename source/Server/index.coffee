@@ -1,43 +1,44 @@
- 
- 
 Matter = require "matter-js"
 Emitter = require "events"
 
+# Libraries and Game
 Lib = require "../Lib"
-
 Game = require "../Game"
+GameBuilder = require "../GameBuilder"
 
-Physics = Game.Physics
-Stage = Game.Stage
+# Server Only
+Player = require "./Player"
 
 # Factories
 Entities = Game.Entities
 
 module.exports = class
 	constructor: (@wss, @logger) ->
+		@emitter = new Emitter
 
 	run: () ->
-
 		@players = []
 
-		# Construct stage and event emitter
-		@emitter = new Emitter
-		@stage = new Stage @emitter
+		# === Build Engines ===
+		physics = new Game.Engines.Physics
 
-		# Instanciate and activate physics controller
-		physics = new Physics @emitter, @stage
-		physics.activate_servermode()
+		# === Build Game ===
+		builder = new GameBuilder
+		@game = builder.build
+			env: Game.Context.ENV_SERVER
 
-		# Also we need an instance of the entities factory
-		@entities = new Entities
+		@game.add_engine physics
 
-		@stage.add_platform @entities.make_platform \
-			400, 600, 800, 20
+		builder.install_all_modules @game
 
-		@stage.add_platform @entities.make_platform \
-			5, 300, 10, 580
-		@stage.add_platform @entities.make_platform \
-			795, 300, 10, 580
+		# === Testing ===
+		@game.add_entity 'platform',
+			x: 400
+			y: 600
+			w: 800
+			h: 20
+
+		@game.add_entity 'crate'
 
 		self = @
 		# setInterval () ->
@@ -51,13 +52,9 @@ module.exports = class
 
 	process_input: (input) ->
 		self = @
-		if input is 'add5'
-			for i in [1..5]
-				self.stage.add_entity self.entities.make 'fragment'
-			return
-		if input is 'add10'
+		if input is 'test'
 			for i in [1..10]
-				self.stage.add_entity self.entities.make 'fragment'
+				self.game.add_entity 'crate'
 			return
 		@logger "The server is not currently configured " +
 			"to process the command \""+input+"\""
@@ -76,7 +73,7 @@ module.exports = class
 		# Push new positions at regular interval
 		setInterval () ->
 			# Fetch entities from stage and serialize them
-			entities = self.stage.get_entities()
+			entities = self.game.get_entities()
 			data = (
 				for entity in entities
 					# TODO: replace with serialize_update
@@ -98,10 +95,6 @@ module.exports = class
 
 		, 20
 
-		# Push events
-		@emitter.on 'stage.add_entity', (entity) ->
-			# Send entity to client
-
 		@emitter.on 'player.chat', (player, message) ->
 			console.log message
 			for recipient in self.players
@@ -119,7 +112,7 @@ module.exports = class
 			ws.removeListener 'message', receiveFirstMessage
 
 			# Create an entity for this player
-			playerEntity = self.entities.make 'launcher'
+			playerEntity = self.game.add_entity 'crate'
 			playerEntity.set_position 100, 0
 
 			# Create player record
@@ -138,7 +131,5 @@ module.exports = class
 			self.players.push player
 			# Listen to player
 			player.listen(self.emitter)
-			# Add player entitiy to stage
-			self.stage.add_entity playerEntity
 
 		ws.on 'message', receiveFirstMessage

@@ -2,7 +2,7 @@
 var urlModule = require('url')
 var readline = require('readline')
 
-// var Server = require('./processed/Server/ServerGM')
+var Server = require('./processed/Server')
 
 module.exports = function(options) {
 
@@ -25,8 +25,8 @@ module.exports = function(options) {
 	console.log('Starting Server...')
 	var WebSocketServer = require('ws').Server;
 	var wss = new WebSocketServer(options);
-	// serverGM = new Server(wss, logger)
-	// serverGM.run()
+	serverGM = new Server(wss, logger)
+	serverGM.run()
 
 	// Run first prompt
 	rl.prompt()
@@ -37,7 +37,7 @@ module.exports = function(options) {
 
 	rl.on('line', function (line) {
 		line = line.trim()
-		// serverGM.process_input(line)
+		serverGM.process_input(line)
 
 		rl.prompt()
 	})
