@@ -13,3 +13,9 @@ module.exports =
 
 	update_from_serialized_data: (body, data) ->
 		Body.set(body, data)
+
+	set_can_rotate: (body, value) ->
+			if value
+				Matter.Body.setInertia(body, 0)
+			else
+				Matter.Body.setInertia(body, Infinity)

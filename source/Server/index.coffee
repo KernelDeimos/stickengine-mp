@@ -33,9 +33,9 @@ module.exports = class
 
 		# === Testing ===
 		@game.add_entity 'platform',
-			x: 400
+			x: -400
 			y: 600
-			w: 800
+			w: 3200
 			h: 20
 
 		@game.add_entity 'crate'
@@ -112,7 +112,7 @@ module.exports = class
 			ws.removeListener 'message', receiveFirstMessage
 
 			# Create an entity for this player
-			playerEntity = self.game.add_entity 'crate'
+			playerEntity = self.game.add_entity 'stickhuman'
 			playerEntity.set_position 100, 0
 
 			# Create player record

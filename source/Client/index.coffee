@@ -24,7 +24,7 @@ module.exports = class
 		builder.install_all_modules(@game)
 
 		# === Modify Game ===
-		player = @game.add_entity 'crate'
+		player = @game.add_entity 'stickhuman'
 
 		# Engine to update camera position
 		@game.add_engine new (class
@@ -51,9 +51,9 @@ module.exports = class
 
 	do_test: () ->
 		@game.add_entity 'platform',
-			x: 400
+			x: -400
 			y: 600
-			w: 800
+			w: 3200
 			h: 20
 
 	get_console: () -> return @userconsole
