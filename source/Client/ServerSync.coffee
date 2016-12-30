@@ -85,11 +85,9 @@ module.exports = class
 						entity = self.entities.deserialize datum
 						self.stage.add_entity entity
 					else
-						# if entity.get_id() isnt self.playerEntityID
-							# entity.set_position datum.position
-						body = entity.get_body()
-						dat  = datum.body_data
-						Lib.Body.update_from_serialized_data body, dat
+						entity.deserialize_update datum
+
+ 
 
 			else if message.type == 'chat'
 				self.userconsole.ouput_message \

@@ -22,16 +22,23 @@ module.exports = class
 
 	# Serialize enough entity data to recreate on client
 	serialize: () ->
+		# Add one-time-only properties
 		data =
-			type: @type,
-			uuid: @uuid,
-			body_data: Lib.Body.serialize(@body)
+			type: @type
+		# Add every-time properties
+		Object.assign data, @serialize_update()
+		# Return object
+		return data
 
 	# Serialize enough entity data to update the client
 	serialize_update: () ->
 		data =
 			uuid: @uuid,
-			position: @body.position
+			body_data: Lib.Body.serialize(@body)
+
+	deserialize_update: (datum) ->
+		dat  = datum.body_data
+		Lib.Body.update_from_serialized_data @body, dat
 
 	# @param deltaT time difference in (milliseconds?)
 	update: (deltaT) ->

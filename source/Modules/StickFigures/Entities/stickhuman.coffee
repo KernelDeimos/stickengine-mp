@@ -14,15 +14,56 @@ StickTreeAnimator = require "../StickTreeAnimator"
 # Data
 Data = require "../Data"
 
-class StickHumanServer extends Game.Entities.BaseEntityCreature
+class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 
-class StickHumanClient extends Game.Entities.BaseEntityCreature
+	setup: () ->
+		@animation = 'none'
+
+	serialize_update: () ->
+		data = super()
+		Object.assign data,
+			animation: @animation
+		return data
+
+
+class StickHumanServer extends StickHumanAbstract
+
+	walk: (direction) ->
+		super direction
+		if direction == 'left'
+			@animation = 'left'
+		else if direction == 'right'
+			@animation = 'right'
+		else
+			@animation = 'none'
+
+
+class StickHumanClient extends StickHumanAbstract
+
 	setup: (@renderable, @animable) ->
+		super()
+
 	get_renderable: () -> return @renderable
 
 	# --- for animations...
 
+	deserialize_update: (datum) ->
+		super datum
+		if datum.animation != @animation
+			console.log "CHANGE ANIM"
+			if datum.animation == 'left'
+				@animable.stop_animation  'walk_right'
+				@animable.start_animation 'walk_left'
+			else if datum.animation == 'right'
+				@animable.stop_animation  'walk_left'
+				@animable.start_animation 'walk_right'
+			else
+				@animable.stop_animation  'walk_right'
+				@animable.stop_animation  'walk_left'
+			@animation = datum.animation
+
 	update: (deltaT) ->
+		super deltaT
 		@animable.increment_clock(deltaT)
 		@animable.process()
 
@@ -31,12 +72,15 @@ class StickHumanClient extends Game.Entities.BaseEntityCreature
 		if direction == 'left'
 			@animable.stop_animation  'walk_right'
 			@animable.start_animation 'walk_left'
+			@animation = 'left'
 		else if direction == 'right'
 			@animable.stop_animation  'walk_left'
 			@animable.start_animation 'walk_right'
+			@animation = 'right'
 		else
 			@animable.stop_animation  'walk_right'
 			@animable.stop_animation  'walk_left'
+			@animation = 'none'
 
 
 module.exports = class extends Game.Entities.BaseEntitySF
@@ -44,6 +88,7 @@ module.exports = class extends Game.Entities.BaseEntitySF
 	make_server: (id, props) ->
 		body = @_make_body()
 		entity = new StickHumanServer('stickhuman', body, id)
+		entity.setup()
 		return entity
 
 	# Make client version of the entity
