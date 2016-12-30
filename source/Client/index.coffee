@@ -26,6 +26,13 @@ module.exports = class
 		# === Modify Game ===
 		player = @game.add_entity 'crate'
 
+		# Engine to update camera position
+		@game.add_engine new (class
+			activate: (context, stage) -> stage.on \
+				'stage.before_update', () ->
+					render.center_camera player.get_position()
+		)
+
 		# === POST GAME INITIALIZATION ===
 
 		# Instanciate keyboard

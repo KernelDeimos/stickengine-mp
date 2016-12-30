@@ -41,6 +41,7 @@ module.exports = class extends Emitter
 	#
 	# @param deltaT  change in time as given by physics engine
 	update: (deltaT) ->
+		@emit('stage.before_update')
 		# Update all entities in stage
 		for entity in @entities
 			entity.update(deltaT)
