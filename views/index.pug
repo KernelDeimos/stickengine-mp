@@ -1,116 +1,161 @@
-extends layout
+doctype html
+html
+	head
+		script(src='bundle.js')
 
-block head
-	script(src='bundle.js')
+		//- === The Console === -//
+		script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
+		style.
+			* {
+				box-sizing: border-box;
+			}
+			#term {
+				z-index: 2;
+				position: absolute;
+				top: 0; left: 0;
+				width: 100%;
+				display: none;
+				height: 160pt;
+				background-color: rgba(0,0,0,0.6);
+				padding: 15pt;
+			}
+			#term > * {
+				font-size: 10pt;
+				line-height: 10pt;
+				font-family: monospace;
+				color: #FFF;
+				/* font-weight: bold; */
+			}
+			#term .contents {
+				height: 95pt;
+				margin-bottom: 15pt;
+				background-color: rgba(0,0,0,0.5);
+				padding: 5pt;
+				white-space: pre-wrap;
+				overflow-y: auto;
+			}
+			#term .input {
+				height: 20pt;
+				background-color: rgba(0,0,0,0.5);
+				padding: 5pt;
+			}
+		style.
+			BODY {
+				background-color: #333;
+			}
+			#tester {
+				z-index: 1;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		script.
+			/*
+			 * Note: The quality of this bit of JavaScript here
+			 * does not reflect the code quality of the game itself;
+			 * this was hacked together super quickly because it's
+			 * totally separate from the game and easy to change.
+			 */
+			// Hence the use of globals...
+			window.on_game_ready = function () {
+				var term = $('#term');
+				var c = window.game.get_console();
+				c.on('ouput', function (message) {
+					var outbox = term.find('.contents');
+					outbox.append(
+						message
+					);
+					outbox.animate({
+						scrollTop: outbox[0].scrollHeight
+					}, 200);
+				});
+			};
 
-	//- === The Console === -//
-	script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
-	style.
-		* {
-			box-sizing: border-box;
-		}
-		#term {
-			position: absolute;
-			top: 0; left: 0;
-			width: 100%;
-			display: none;
-			height: 160pt;
-			background-color: rgba(0,0,0,0.6);
-			padding: 15pt;
-		}
-		#term > * {
-			font-size: 10pt;
-			line-height: 10pt;
-			font-family: monospace;
-			color: #FFF;
-			/* font-weight: bold; */
-		}
-		#term .contents {
-			height: 95pt;
-			margin-bottom: 15pt;
-			background-color: rgba(0,0,0,0.5);
-			padding: 5pt;
-			white-space: pre-wrap;
-			overflow-y: auto;
-		}
-		#term .input {
-			height: 20pt;
-			background-color: rgba(0,0,0,0.5);
-			padding: 5pt;
-		}
-	script.
-		/*
-		 * Note: The quality of this bit of JavaScript here
-		 * does not reflect the code quality of the game itself;
-		 * this was hacked together super quickly because it's
-		 * totally separate from the game and easy to change.
-		 */
-		// Hence the use of globals...
-		window.on_game_ready = function () {
-			var term = $('#term');
-			var c = window.game.get_console();
-			c.on('ouput', function (message) {
-				var outbox = term.find('.contents');
-				outbox.append(
-					message
-				);
-				outbox.animate({
-					scrollTop: outbox[0].scrollHeight
-				}, 200);
-			});
-		};
+			$(window).keypress(function (evt) {
+				var term = $('#term');
+				var cons = window.game.get_console();
+				// If console key pressed
+				if (evt.which == 96 || evt.which == 126) {
+					// If we're going to show the terminal
+					if (term.is(':hidden')) {
+						// Ignore inputs and focus terminal
+						window.game.ignore_inputs();
+						term.slideToggle(200)
+						term.find('.input').first().focus();
+					}
+					// If we're going to hide the terminal
+					else {
+						// Re-enable game inputs and blur terminal
+						window.game.accept_inputs();
+						term.slideToggle(200)
+						term.find('.input').first().blur();
+					}
 
-		$(window).keypress(function (evt) {
-			var term = $('#term');
-			var cons = window.game.get_console();
-			// If console key pressed
-			if (evt.which == 96 || evt.which == 126) {
-				// If we're going to show the terminal
-				if (term.is(':hidden')) {
-					// Ignore inputs and focus terminal
-					window.game.ignore_inputs();
-					term.slideToggle(200)
-					term.find('.input').first().focus();
+					// Don't propogate '`' to terminal input
+					evt.preventDefault();
+					return false;
 				}
-				// If we're going to hide the terminal
+				else
+				// If enter key pressed
+				if (evt.which == 13) {
+					if (term.is(':visible')) {
+						// Send input to game
+						inputO = term.find('.input')
+						input = inputO.html();
+						inputO.html('');
+						cons.enter_command(input)
+
+					}
+
+					// Don't propogate "\n" to terminal input
+					evt.preventDefault();
+					return false;
+				}
+
+			})
+
+		script.
+				var resizeMethod = function (event) {
+				console.log("test")
+				var dims = [
+				event.currentTarget.innerWidth,
+				event.currentTarget.innerHeight
+				];
+				var rW = dims[0] / 16.0;
+				var rH = dims[1] /  9.0;
+				var canvas = document.getElementById('tester');
+				// Lame square screen
+				if (rH > rW) {
+				var newH = rW *  9.0;
+				var half = newH / 2;
+				canvas.style.top    = (dims[1]*0.5 - half)+'px';
+				canvas.style.left   = 0;
+				canvas.style.height = newH+'px';
+				canvas.style.width  = '100%';
+				}
+				// Wider screen
 				else {
-					// Re-enable game inputs and blur terminal
-					window.game.accept_inputs();
-					term.slideToggle(200)
-					term.find('.input').first().blur();
+				var newW = rH * 16.0;
+				var half = newW / 2;
+				canvas.style.top    = 0;
+				canvas.style.left   = (dims[0]*0.5 - half)+'px';
+				canvas.style.height = '100%';
+				canvas.style.width  = newW+'px';
+				}
+				}
+				window.addEventListener('resize', function (event) {
+				resizeMethod(event);
+				}, true);
+				function main () {
+					resizeMethod({currentTarget:window});
 				}
 
-				// Don't propogate '`' to terminal input
-				evt.preventDefault();
-				return false;
-			}
-			else
-			// If enter key pressed
-			if (evt.which == 13) {
-				if (term.is(':visible')) {
-					// Send input to game
-					inputO = term.find('.input')
-					input = inputO.html();
-					inputO.html('');
-					cons.enter_command(input)
+	body(onload='main()')
+		canvas#tester(width=1600,height=900)
+		#term
+			.contents
+				| Say hello!
+				| Note: nobody will see your message until the open chat. (that's gonna be fixed soon)
+				= "\n"
+			.input(contenteditable=true)
 
-				}
-
-				// Don't propogate "\n" to terminal input
-				evt.preventDefault();
-				return false;
-			}
-
-		})
-
-block content
-	#term
-		.contents
-			| Say hello!
-			| Note: nobody will see your message until the open chat. (that's gonna be fixed soon)
-			= "\n"
-		.input(contenteditable=true)
-	h3 Multiplayer &amp; Physics Testing [Controls: WASD + Space, ~ for chat]
-	canvas#tester(width=800,height=600)
-	p Chatroom for squares: 
-		a(href='http://us20.chatzy.com/18145690423552',target='_blank') http://us20.chatzy.com/18145690423552
