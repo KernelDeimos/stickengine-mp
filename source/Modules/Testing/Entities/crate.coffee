@@ -18,5 +18,7 @@ module.exports = class extends Game.Entities.BaseEntitySF
 	make_client: (id, props) ->
 		body = Bodies.rectangle(0, 0, 60, 60)
 		entity = new CrateClient('crate', body, id)
-		entity.set_renderable new Game.Common.Render.BodyRenderable body
+		# entity.set_renderable new Game.Common.Render.BodyRenderable body
+		entity.set_renderable new Game.Common.Render.ImageRenderable \
+			body, '/images/crate.png', 60, 60
 		return entity

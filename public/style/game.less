@@ -1,0 +1,160 @@
+/* === Page === */
+* {
+	box-sizing: border-box;
+}
+BODY {
+	background-color: #333;
+}
+
+/* === Terminal === */
+.main_terminal {
+	z-index: 2;
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	display: none;
+	height: 160pt;
+	background-color: rgba(0,0,0,0.6);
+	padding: 15pt;
+}
+.main_terminal > * {
+	font-size: 10pt;
+	line-height: 10pt;
+	font-family: monospace;
+	color: #FFF;
+	/* font-weight: bold; */
+}
+.main_terminal .contents {
+	height: 95pt;
+	margin-bottom: 15pt;
+	background-color: rgba(0,0,0,0.5);
+	padding: 5pt;
+	white-space: pre-wrap;
+	overflow-y: auto;
+}
+.main_terminal .input {
+	height: 20pt;
+	background-color: rgba(0,0,0,0.5);
+	padding: 5pt;
+}
+
+/* === Menu === */
+.main_menu {
+	z-index: 2;
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.9);
+	color: #FFF;
+	padding: 15pt;
+	font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+	.screen {
+		display: none;
+	}
+
+	.header {
+		.title {
+			display: inline-block;
+			font-size: 20pt;
+			height: 32pt;
+		}
+		.options {
+			display: inline-block;
+			float: right;
+			height: 32pt;
+			.option {
+				display: inline-block;
+				cursor: pointer;
+				border: 1px solid #FFF;
+				padding: 5pt;
+				color: #FFF;
+				background-color: #000;
+				&:hover, &:focus {
+					background-color: rgba(0,255,255,0.3);
+				}
+			}
+		}
+	}
+}
+.main_menu .form {
+	.entry {
+		.label {
+			font-size: 24pt;
+		}
+		input {
+			font-size: 20pt;
+			line-height: 24pt;
+			width: 100%;
+			background-color: #000;
+			border: 2px solid #FFF;
+			color: #FFF;
+			border-left: none;
+			border-right: none;
+			&:focus {
+				background-color: rgba(0,255,255,0.3);
+			}
+		}
+		padding-bottom: 10pt;
+	}
+}
+.main_menu .actions {
+	padding-top: 10pt;
+	.action {
+		cursor: pointer;
+		display: inline-block;
+		float: right;
+		font-size: 24pt;
+		padding: 10pt;
+		border: 2px solid #FFF;
+		color: #FFF;
+		background-color: #000;
+		&:hover, &:focus {
+			background-color: rgba(0,255,255,0.3);
+		}
+	}
+}
+.main_menu .servers {
+	border: 4px double #FFF;
+	display: table;
+	width: 100%;
+	.thead {
+		display: table-header-group;
+		line-height: 24pt;
+		height: 24pt;
+		.field {
+			display: table-cell;
+			padding: 0 10pt;
+			font-size: 14pt;
+			font-weight: bold;
+			border-bottom: 2px solid #FFF;
+		}
+	}
+	.tbody {
+		display: table-row-group;
+	}
+	.server {
+		display: table-row;
+		height: 24pt;
+		line-height: 24pt;
+
+		&:hover, &:focus {
+			background-color: rgba(0,255,255,0.3);
+		}
+	}
+	.server .field {
+		cursor: pointer;
+		padding: 0 10pt;
+		font-size: 14pt;
+		display: table-cell;
+	}
+}
+
+/* === Canvas === */
+.main_canvas {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+}

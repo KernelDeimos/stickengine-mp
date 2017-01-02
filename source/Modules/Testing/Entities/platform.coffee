@@ -24,6 +24,11 @@ module.exports = class extends Game.Entities.BaseEntitySF
 
 	_make_body: (props) ->
 		p = props
-		body = Matter.Bodies.rectangle(p.x, p.y, p.w, p.h)
+
+		# Fix for top-left positioning
+		x = p.x + 0.5*p.w
+		y = p.y + 0.5*p.h
+
+		body = Matter.Bodies.rectangle(x, y, p.w, p.h)
 		Matter.Body.setStatic(body, true)
 		return body

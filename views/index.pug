@@ -5,114 +5,11 @@ html
 
 		//- === The Console === -//
 		script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
-		style.
-			* {
-				box-sizing: border-box;
-			}
-			#term {
-				z-index: 2;
-				position: absolute;
-				top: 0; left: 0;
-				width: 100%;
-				display: none;
-				height: 160pt;
-				background-color: rgba(0,0,0,0.6);
-				padding: 15pt;
-			}
-			#term > * {
-				font-size: 10pt;
-				line-height: 10pt;
-				font-family: monospace;
-				color: #FFF;
-				/* font-weight: bold; */
-			}
-			#term .contents {
-				height: 95pt;
-				margin-bottom: 15pt;
-				background-color: rgba(0,0,0,0.5);
-				padding: 5pt;
-				white-space: pre-wrap;
-				overflow-y: auto;
-			}
-			#term .input {
-				height: 20pt;
-				background-color: rgba(0,0,0,0.5);
-				padding: 5pt;
-			}
-		style.
-			BODY {
-				background-color: #333;
-			}
-			#tester {
-				z-index: 1;
-				position: absolute;
-				top: 0;
-				left: 0;
-			}
-		script.
-			/*
-			 * Note: The quality of this bit of JavaScript here
-			 * does not reflect the code quality of the game itself;
-			 * this was hacked together super quickly because it's
-			 * totally separate from the game and easy to change.
-			 */
-			// Hence the use of globals...
-			window.on_game_ready = function () {
-				var term = $('#term');
-				var c = window.game.get_console();
-				c.on('ouput', function (message) {
-					var outbox = term.find('.contents');
-					outbox.append(
-						message
-					);
-					outbox.animate({
-						scrollTop: outbox[0].scrollHeight
-					}, 200);
-				});
-			};
 
-			$(window).keypress(function (evt) {
-				var term = $('#term');
-				var cons = window.game.get_console();
-				// If console key pressed
-				if (evt.which == 96 || evt.which == 126) {
-					// If we're going to show the terminal
-					if (term.is(':hidden')) {
-						// Ignore inputs and focus terminal
-						window.game.ignore_inputs();
-						term.slideToggle(200)
-						term.find('.input').first().focus();
-					}
-					// If we're going to hide the terminal
-					else {
-						// Re-enable game inputs and blur terminal
-						window.game.accept_inputs();
-						term.slideToggle(200)
-						term.find('.input').first().blur();
-					}
+		link(rel='stylesheet', href='/style/game.css')
 
-					// Don't propogate '`' to terminal input
-					evt.preventDefault();
-					return false;
-				}
-				else
-				// If enter key pressed
-				if (evt.which == 13) {
-					if (term.is(':visible')) {
-						// Send input to game
-						inputO = term.find('.input')
-						input = inputO.html();
-						inputO.html('');
-						cons.enter_command(input)
-
-					}
-
-					// Don't propogate "\n" to terminal input
-					evt.preventDefault();
-					return false;
-				}
-
-			})
+		script(src='/script/terminal.js')
+		script(src='/script/menu.js')
 
 		script.
 				var resizeMethod = function (event) {
@@ -151,11 +48,39 @@ html
 				}
 
 	body(onload='main()')
-		canvas#tester(width=1600,height=900)
-		#term
+		canvas#tester.main_canvas(width=1600,height=900)
+		#menu.main_menu
+			.screen(data-name='game_select',style='display:block')
+				.header
+					.title Server List
+					.options
+						button.option.refresh Refresh
+						button.option.sw(data-screen='game_create') Create Server
+				.servers
+					.thead
+						.field Server Name
+						.field Map
+						.field Players
+					.tbody
+						| Waiting for server data...
+			.screen(data-name='game_create')
+				.header
+					.title Start a Game
+					.options
+						button.option.sw(data-screen='game_select') Cancel
+				form.form(data-name='game_create_form')
+					input(type='hidden',name='action',value='create')
+					.entry
+						.label Game
+						input(name='name', autocomplete="off")
+					.entry
+						.label Map
+						input(name='mapname', autocomplete="off")
+				.actions
+					button.action.submit(data-form='game_create_form') Start Game
+		#term.main_terminal
 			.contents
 				| Say hello!
 				| Note: nobody will see your message until the open chat. (that's gonna be fixed soon)
 				= "\n"
 			.input(contenteditable=true)
-

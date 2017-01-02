@@ -1,8 +1,8 @@
 // Ext libraries
-var urlModule = require('url')
-var readline = require('readline')
+var urlModule = require('url');
+var readline = require('readline');
 
-var Server = require('./processed/Server')
+var server_init = require('./processed/server');
 
 module.exports = function(options) {
 
@@ -25,8 +25,10 @@ module.exports = function(options) {
 	console.log('Starting Server...')
 	var WebSocketServer = require('ws').Server;
 	var wss = new WebSocketServer(options);
-	serverGM = new Server(wss, logger)
-	serverGM.run()
+
+	server_init(wss,logger);
+	// serverGM = new Server(wss, logger)
+	// serverGM.run()
 
 	// Run first prompt
 	rl.prompt()

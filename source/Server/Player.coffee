@@ -35,6 +35,8 @@ module.exports = class
 
 			if message.type == 'chat'
 				msg = message.message
-				msg = \
-				'['+self.entity.get_id().substring(0,6)+'] '+ msg
+				# msg = \
+				# '['+self.entity.get_id().substring(0,6)+'] '+ msg
 				emitter.emit('player.chat', self, msg)
+
+	get_id: () -> @.entity.get_id().substring(0,6)

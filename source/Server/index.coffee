@@ -13,7 +13,7 @@ Player = require "./Player"
 Entities = Game.Entities
 
 module.exports = class
-	constructor: (@wss, @logger) ->
+	constructor: (@logger) ->
 		@emitter = new Emitter
 
 	run: () ->
@@ -31,6 +31,9 @@ module.exports = class
 
 		builder.install_all_modules @game
 
+		@loader = new Game.MapLoader
+		@game.install_module @loader
+
 		# === Testing ===
 		@game.add_entity 'platform',
 			x: -400
@@ -38,7 +41,8 @@ module.exports = class
 			w: 3200
 			h: 20
 
-		@game.add_entity 'crate'
+		crate = @game.add_entity 'crate'
+		crate.set_position(200, -400)
 
 		self = @
 		# setInterval () ->
@@ -46,9 +50,10 @@ module.exports = class
 		# 		self.stage.add_entity self.entities.make 'fragment'
 		# , 60000
 
-		@_listen()
-
 		@_push()
+
+	load_map: (mapData) ->
+		@loader.load_map mapData
 
 	process_input: (input) ->
 		self = @
@@ -60,11 +65,9 @@ module.exports = class
 			"to process the command \""+input+"\""
 
 	# Listens to incoming connections
-	_listen: () ->
-		self = @
-		@wss.on 'connection', (ws) ->
-			self.logger "New Connection!"
-			self._add_new_player ws
+	add_player: (ws) ->
+		@logger "New Player!"
+		@_add_new_player ws
 
 	# Pushes updates to players
 	_push: () ->
@@ -97,10 +100,21 @@ module.exports = class
 
 		@emitter.on 'player.chat', (player, message) ->
 			console.log message
-			for recipient in self.players
-				recipient.send
-					type: 'chat',
-					message: message
+
+			if message.charAt(0) == '/'
+				console.log "TODO: Verify player permissions"
+				console.log "TODO: Modularize command system"
+				if message == '/crates'
+					for i in [1..20]
+						crate = self.game.add_entity 'crate'
+				if message == '/stres'
+					for i in [1..100]
+						crate = self.game.add_entity 'crate'
+
+				for recipient in self.players
+					recipient.send
+						type: 'chat',
+						message: message
 
 	_add_new_player: (ws) ->
 

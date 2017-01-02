@@ -1,24 +1,82 @@
 domready = require "domready"
+Emitter = require "events"
 WebSocket = require "./Client/WSWrapper"
 
+Resources = require "./Resources"
+
 Client = require "./Client"
+
+class Menu extends Emitter
+	constructor: (@menu) ->
+
+class Term extends Emitter
+	constructor: (@menu) ->
+
 
 domready(
 	() ->
 		canvas = document.getElementById('tester')
+		menuEl = document.getElementById('menu')
 
-		# Connect to server
-		ws = new WebSocket 'ws://127.0.0.1:8232'
+		window.menu = menu = new Menu menuEl
+		window.term = term = new Term
 
-		game = new Client canvas, ws
+		ws = null
+
+		menu.on 'do', (data) ->
+				console.log 'Outgoing:'
+				console.log data
+				ws.send JSON.stringify data
+
+		menu.on 'ready', () ->
+
+			console.log 'client menu ready'
+
+			# Connect to server
+			# ws = new WebSocket 'ws://127.0.0.1:8232'
+			ws = new WebSocket 'ws://192.168.0.111:8232'
+
+			ws.on 'open', () ->
+				menu.emit 'connected'
+
+			ws.on 'message', (message) ->
+				message = JSON.parse message
+
+				console.log 'Incoming:'
+				console.log message
+
+				# Server sends this after a server list was requested
+				if message.type == "serverlist"
+					menu.emit 'serverlist', message.games
+					return
+
+				# Server sends this when the player joins a game
+				if message.type == "gameon"
+					# Update menu (menu will hide)
+					menu.emit 'gameon'
+					# Stop listening to server (this is the clients job)
+					ws.removeAllListeners();
+					# Start client
+					client = new Client canvas, ws
+					client.start()
+					window.game = client
+					term.emit 'new_game', client.get_console(), client
+					# Load a map
+					mapData = Resources.Maps[message.mapname]
+					# console.log mapData
+					client.load_map mapData
+					# Send first message
+					ws.send 'ready'
+
+		# game = new Client canvas, ws
 
 		# expose game for console debugging
-		window.game = game
+		# window.game = game
 
-		setTimeout () ->
-			window.on_game_ready()
-		, 10
+		# setTimeout () ->
+			# window.on_game_ready()
+		# , 10
 
-		game.start()
-		game.do_test()
+		# game.start()
+		# game.do_test()
 )

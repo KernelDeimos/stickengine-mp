@@ -9,5 +9,6 @@ module.exports = class extends Emitter
 		@ws.onopen = (evt) -> self.emit 'open', evt
 		@ws.onclose = (evt) -> self.emit 'close', evt
 		@ws.onmessage = (evt) -> self.emit 'message', evt.data
+		@ws.onopen = (evt) -> self.emit 'open', evt.data
 
 	send: (message) -> @ws.send message

@@ -67,10 +67,10 @@ module.exports = class
 		self = @
 
 		self.userconsole.on 'input', (message) ->
-			if message[0] != '/'
-				self.ws.send JSON.stringify
-					type: 'chat',
-					message: message
+			# if message[0] != '/'
+			self.ws.send JSON.stringify
+				type: 'chat',
+				message: message
 
 	_listen: () ->
 		self = @

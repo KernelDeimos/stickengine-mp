@@ -33,6 +33,9 @@ module.exports = class
 					render.center_camera player.get_position()
 		)
 
+		@loader = new Game.MapLoader
+		@game.install_module @loader
+
 		# === POST GAME INITIALIZATION ===
 
 		# Instanciate keyboard
@@ -48,6 +51,9 @@ module.exports = class
 		@keyboard = keyboard
 
 		@_poll_inputs keyboard, player
+
+	load_map: (mapData) ->
+		@loader.load_map mapData
 
 	do_test: () ->
 		@game.add_entity 'platform',

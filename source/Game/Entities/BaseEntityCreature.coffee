@@ -7,7 +7,7 @@ module.exports = class extends BaseEntity
 	constructor: (@type, @body, @uuid) ->
 		super @type, @body, @uuid
 		@walking = 0 # direction of  walking; -1, +1, or 0
-		@walkingSpeed = 8 / 100 # 80 pt / ms
+		@walkingSpeed = 8 / 50 # 160 pt / ms
 		@jumpVelocity = 10
 
 	# @override

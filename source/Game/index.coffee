@@ -11,3 +11,4 @@ module.exports =
 	Engines: require "./Engines"
 	# ??? (Stuff)
 	Misc: require "./Misc"
+	MapLoader: require "./MapLoader"
