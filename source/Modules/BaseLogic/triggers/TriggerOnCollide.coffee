@@ -4,22 +4,29 @@ Logic = Game.Logic
 class OnCollide extends Logic.Trigger
 
 	constructor: (base) ->
-		@physics = base.physics
+		@events = base.events
 		super
 
-	activate: (objects) ->
+	activate: (params) ->
 		console.log "Activating trigger"
 		self = @
 
-		if not 'entity' of objects
+		if not 'entity' of params
 			throw new Error "missing parameter: entity"
 
-		@physics.on_entity_collide objects.entity, (event) ->
+		# Make collide callback
+		fCollide = (event) ->
+			# Create event for action
 			ev = {
-				'trigger': objects.entity,
+				'trigger': params.entity,
 				'collider': event.entity
 			}
+			# Fire trigger
 			self.fire(ev)
+
+		# This event should invoke the physics engine
+		@events.emit 'trigger.add_collide_callback', \
+			params.entity.get_body(), fCollide
 
 class OnCollideFactory
 	constructor: (@physics) ->

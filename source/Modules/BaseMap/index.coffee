@@ -15,7 +15,7 @@ class ThisModule extends Game.Modules.BaseModule
 			base.entities.register_entity type, factory
 
 		## Rule: Jumping platforms should launch things
-		base.stage.on 'stage.add_entity.jumper', (entity) ->
+		base.stage.on 'stage.add_entity.jumper', (jumper) ->
 			trig = base.triggers.make 'collide' # On a collision,
 			action = base.actions.make 'throw'  # throw something!
 
@@ -23,9 +23,9 @@ class ThisModule extends Game.Modules.BaseModule
 			trig.set_event_param 'throwee', 'collider'
 			trig.set_event_param 'thrower', 'trigger'
 			trig.set_value_param 'velocity',
-				x: 0
-				y: -entity.velocity / 25
+				x: null
+				y: -jumper.get_velocity() / 50
 			trig.with
-				entity: entity
+				entity: jumper
 
 module.exports = new ThisModule

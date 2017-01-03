@@ -1,6 +1,6 @@
 # This class renders a Matter-JS body.
 module.exports = class
-	constructor: (@body) ->
+	constructor: (@body, @fill=null) ->
 	render: (context) ->
 		context.beginPath()
 
@@ -18,4 +18,8 @@ module.exports = class
 
 		context.lineWidth = 2;
 		context.strokeStyle = '#999';
+		context.closePath();
+		if (@fill != null)
+			context.fillStyle = @fill
+			context.fill();
 		context.stroke();

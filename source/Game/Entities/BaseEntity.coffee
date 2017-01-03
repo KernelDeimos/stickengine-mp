@@ -43,5 +43,9 @@ module.exports = class
 	# @param deltaT time difference in (milliseconds?)
 	update: (deltaT) ->
 
+	# Physical actions
+	throw: (x, y) ->
+		Lib.Body.set_velocity @body, x, y
+
 	set_id: (@uuid) ->
 	get_id: () -> @uuid

@@ -8,6 +8,30 @@ var ladderThing3 = 2;
 map = {
 	'name': "Platform Testing Grounds",
 	'objects': [
+
+		// Floor
+		{
+			'type': 'jumper',
+			'options': {
+				'x': -2000,
+				'y': 1000,
+				'w': 4000,
+				'h': 40,
+				'velocity': 2000
+			}
+		},
+
+		// Ceiling
+		{
+			'type': 'platform',
+			'options': {
+				'x': -500,
+				'y': -600,
+				'w': 1600,
+				'h': 20
+			}
+		},
+
 		{
 			'type': 'platform',
 			'options': {
@@ -17,7 +41,6 @@ map = {
 				'h': 20
 			}
 		},
-
 
 		// Complex platform
 		{
@@ -147,7 +170,7 @@ map = {
 			}			
 		},
 
-		// Ladder thing
+		// Two platforms below jump
 		{
 			'type': 'platform',
 			'options': {
@@ -166,6 +189,7 @@ map = {
 				'h': 20
 			}
 		},
+
 		// Jump platform
 		{
 			'type': 'jumper',
@@ -178,7 +202,8 @@ map = {
 			}
 		},
 
-		// Ladder thing 2
+		// Those thin platforms
+		
 		{
 			'type': 'platform',
 			'options': {
@@ -210,7 +235,7 @@ map = {
 		// Ladder thing 3
 		{
 			'type': 'platform',
-			'data': {
+			'options': {
 				'x': -840,
 				'y': 250,
 				'w': 240,
@@ -219,7 +244,7 @@ map = {
 		},
 		{
 			'type': 'platform',
-			'data': {
+			'options': {
 				'x': -880,
 				'y': 250-ladderThing3*1,
 				'w': 200,
@@ -228,7 +253,7 @@ map = {
 		},
 		{
 			'type': 'platform',
-			'data': {
+			'options': {
 				'x': -920,
 				'y': 250-ladderThing3*2,
 				'w': 200,
@@ -237,75 +262,58 @@ map = {
 		},
 		{
 			'type': 'platform',
-			'data': {
+			'options': {
 				'x': -960,
 				'y': 250-ladderThing3*3,
 				'w': 200,
 				'h': 10
 			}
 		},
-
-		// Floor
-		{
-			'type': 'jumper',
-			'data': {
-				'x': -2000,
-				'y': 1000,
-				'w': 4000,
-				'h': 40,
-				'velocity': 2000
-			},
-		},
-
-		// Ceiling
-		{
-			'type': 'platform',
-			'data': {
-				'x': -500,
-				'y': -600,
-				'w': 1600,
-				'h': 20
-			}
-		}
 	]
 };
-// (function(){
-// 	var obs = map.objects;
+(function(){
+	var obs = map.objects;
 
-// 	xi = -960;
-// 	yi = 244;
-
-// 	s = 20; // step size
-
-// 	// if (true) for (var i=0; i < 500; i++) {
-// 	// 	var obj = {
-// 	// 		'type': 'jumper',
-// 	// 		'data': [xi-i*s,yi-i*s,10,10],
-// 	// 		'velocity': 100
-// 	// 	};
-// 	// 	obs.push(obj);
-// 	// }
-
-// 	for (var i=0; i < 10; i++) {
-// 		var x = 1050 + 205*i;
-// 		// Complex platform
-// 		obs.push({
-// 			'type': 'jumper',
-// 			'data': [x+10,60,180,10],
-// 			'velocity': 200*i
-// 		});
-// 		obs.push({
-// 			'type': 'platform',
-// 			'data': [x+0,70,200,10]
-// 		});
-// 		obs.push({
-// 			'type': 'platform',
-// 			'data': [x+0,60,10,10]
-// 		});
-// 		obs.push({
-// 			'type': 'platform',
-// 			'data': [x+190,60,10,10]
-// 		});
-// 	}
-// })();
+	for (var i=0; i < 10; i++) {
+		var x = 1050 + 205*i;
+		// Complex platform
+		obs.push({
+			'type': 'jumper',
+			'options': {
+				'x': x+10,
+				'y': 60,
+				'w': 180,
+				'h': 10,
+				'velocity': 200*i
+			}
+		});
+		obs.push({
+			'type': 'platform',
+			'options': {
+				'x': x+0,
+				'y': 70,
+				'w': 200,
+				'h': 10
+			}
+		});
+		obs.push({
+			'type': 'platform',
+			'options': {
+				'x': x+0,
+				'y': 60,
+				'w': 10,
+				'h': 10
+			}
+		});
+		obs.push({
+			'type': 'platform',
+			'options': {
+				'x': x+190,
+				'y': 60,
+				'w': 10,
+				'h': 10
+			}
+		});
+	}
+})();
 module.exports = map;

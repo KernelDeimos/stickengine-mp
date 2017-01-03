@@ -34,13 +34,6 @@ module.exports = class
 		@loader = new Game.MapLoader
 		@game.install_module @loader
 
-		# === Testing ===
-		@game.add_entity 'platform',
-			x: -400
-			y: 600
-			w: 3200
-			h: 20
-
 		crate = @game.add_entity 'crate'
 		crate.set_position(200, -400)
 

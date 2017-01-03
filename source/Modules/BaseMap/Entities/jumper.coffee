@@ -1,12 +1,18 @@
+ 
 Matter = require 'matter-js'
 
 Game = require "../../../Game"
 
 PlatformRenderable = require "../PlatformRenderable"
 
-class PlatformServer extends Game.Entities.BaseEntity
+class PlatformBase extends Game.Entities.BaseEntity
+	setup: (props) ->
+		@velocity = props.velocity
+	get_velocity: () -> @velocity
 
-class PlatformClient extends Game.Entities.BaseEntity
+class PlatformServer extends PlatformBase
+
+class PlatformClient extends PlatformBase
 	set_renderable: (@renderable) ->
 	get_renderable: () -> return @renderable
 
@@ -14,14 +20,17 @@ module.exports = class extends Game.Entities.BaseEntitySF
 	# Make server version of the entity
 	make_server: (id, props) ->
 		body = @_make_body(props)
-		entity = new PlatformServer('platform', body, id)
+		entity = new PlatformServer('jumper', body, id)
+		entity.setup props
 		return entity
 
 	# Make client version of the entity
 	make_client: (id, props) ->
 		body = @_make_body(props)
-		entity = new PlatformClient('platform', body, id)
-		entity.set_renderable new PlatformRenderable body, null
+		entity = new PlatformClient('jumper', body, id)
+		entity.setup props
+		entity.set_renderable new PlatformRenderable \
+			body, props.velocity
 		return entity
 
 	_make_body: (props) ->
@@ -34,3 +43,4 @@ module.exports = class extends Game.Entities.BaseEntitySF
 		body = Matter.Bodies.rectangle(x, y, p.w, p.h)
 		Matter.Body.setStatic(body, true)
 		return body
+

@@ -10,9 +10,6 @@ module.exports = class
 			# Get data 
 			type = object.type
 
-			# TEMPORARY
-			if type == 'jumper' then type = 'platform'
-
 			id   = if object.id? then object.id else undefined
 			opts = object.options
 			

@@ -19,3 +19,17 @@ module.exports =
 				Matter.Body.setInertia(body, 0)
 			else
 				Matter.Body.setInertia(body, Infinity)
+
+	apply_velocity: (body, x, y) ->
+		v_old = body.velocity
+		v_new =
+			x: v_old.x + x
+			y: v_old.y + y
+		Matter.Body.setVelocity(body, v_new)
+
+	set_velocity: (body, x, y) ->
+		v_old = body.velocity
+		v_new =
+			x: if x == null then v_old.x else x
+			y: if y == null then v_old.y else y
+		Matter.Body.setVelocity(body, v_new)
