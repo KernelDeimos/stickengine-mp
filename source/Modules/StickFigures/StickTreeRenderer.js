@@ -40,7 +40,7 @@ classn.prototype.draw_limb = function(context, limb) {
 		// Draw line
 		context.moveTo(spos.x, spos.y);
 		context.lineTo(epos.x, epos.y);
-		context.lineWidth = this.thickness;
+		context.lineWidth = thick;
 		context.strokeStyle = "rgb(0,0,0)";
 		context.stroke();
 	}

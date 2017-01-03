@@ -1,7 +1,8 @@
-modules = []
+modules = {}
 
-modules.push require "./Testing"
-modules.push require "./StickFigures"
+modules.BaseMap = require "./BaseMap"
+modules.StickFigures = require "./StickFigures"
+modules.BaseLogic = require "./BaseLogic"
 
 module.exports =
 	get_all: () ->

@@ -2,8 +2,33 @@
 * {
 	box-sizing: border-box;
 }
+
+.trytheme(@theme) when (@theme = 'lite') {
+	@col_bg_accent: #CCC;
+
+	@col_term_outer_bg: rgba(255,255,255,0.6);
+	@col_term_inner_bg: rgba(255,255,255,0.5);
+	@col_term_fg: #000;
+	@term_border: 1px solid rgba(0,0,0,0.3);
+
+	@menu_bg: rgba(255,255,255,0.9);
+	@menu_fg: #000;
+}
+.trytheme(@theme) when (@theme = 'dark') {
+	@col_bg_accent: #333;
+
+	@col_term_outer_bg: rgba(0,0,0,0.6);
+	@col_term_inner_bg: rgba(0,0,0,0.5);
+	@col_term_fg: #FFF;
+	@term_border: 1px solid rgba(255,255,255,0.3);
+
+	@menu_bg: rgba(0,0,0,0.9);
+	@menu_fg: #FFF;
+}
+.trytheme('lite');
+
 BODY {
-	background-color: #333;
+	background-color: @col_bg_accent;
 }
 
 /* === Terminal === */
@@ -14,27 +39,28 @@ BODY {
 	width: 100%;
 	display: none;
 	height: 160pt;
-	background-color: rgba(0,0,0,0.6);
+	background-color: @col_term_outer_bg;
+	border: @term_border;
 	padding: 15pt;
 }
 .main_terminal > * {
 	font-size: 10pt;
 	line-height: 10pt;
 	font-family: monospace;
-	color: #FFF;
+	color: @col_term_fg;
 	/* font-weight: bold; */
 }
 .main_terminal .contents {
 	height: 95pt;
 	margin-bottom: 15pt;
-	background-color: rgba(0,0,0,0.5);
+	background-color: @col_term_inner_bg;
 	padding: 5pt;
 	white-space: pre-wrap;
 	overflow-y: auto;
 }
 .main_terminal .input {
 	height: 20pt;
-	background-color: rgba(0,0,0,0.5);
+	background-color: @col_term_inner_bg;
 	padding: 5pt;
 }
 
@@ -45,8 +71,8 @@ BODY {
 	top: 0; left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0,0,0,0.9);
-	color: #FFF;
+	background-color: @menu_bg;
+	color: @menu_fg;
 	padding: 15pt;
 	font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 
@@ -67,10 +93,10 @@ BODY {
 			.option {
 				display: inline-block;
 				cursor: pointer;
-				border: 1px solid #FFF;
+				border: 1px solid @menu_fg;
 				padding: 5pt;
-				color: #FFF;
-				background-color: #000;
+				color: @menu_fg;
+				background-color: @menu_bg;
 				&:hover, &:focus {
 					background-color: rgba(0,255,255,0.3);
 				}
@@ -87,9 +113,9 @@ BODY {
 			font-size: 20pt;
 			line-height: 24pt;
 			width: 100%;
-			background-color: #000;
-			border: 2px solid #FFF;
-			color: #FFF;
+			background-color: @menu_bg;
+			border: 2px solid @menu_fg;
+			color: @menu_fg;
 			border-left: none;
 			border-right: none;
 			&:focus {
@@ -107,16 +133,16 @@ BODY {
 		float: right;
 		font-size: 24pt;
 		padding: 10pt;
-		border: 2px solid #FFF;
-		color: #FFF;
-		background-color: #000;
+		border: 2px solid @menu_fg;
+		color: @menu_fg;
+		background-color: @menu_bg;
 		&:hover, &:focus {
 			background-color: rgba(0,255,255,0.3);
 		}
 	}
 }
 .main_menu .servers {
-	border: 4px double #FFF;
+	border: 4px double @menu_fg;
 	display: table;
 	width: 100%;
 	.thead {
@@ -128,7 +154,7 @@ BODY {
 			padding: 0 10pt;
 			font-size: 14pt;
 			font-weight: bold;
-			border-bottom: 2px solid #FFF;
+			border-bottom: 2px solid @menu_fg;
 		}
 	}
 	.tbody {
