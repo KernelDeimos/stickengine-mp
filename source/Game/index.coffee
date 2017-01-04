@@ -1,3 +1,8 @@
+# Plugins for Matter
+Matter = require 'matter-js'
+require "../MatterPlugins"
+Matter.use('matter-platformer-tools')
+
 module.exports =
 	# Game Instance
 	Context: require "./Context"
