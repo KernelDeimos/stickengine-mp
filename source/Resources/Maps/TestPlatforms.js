@@ -100,6 +100,40 @@ map = {
 				'h': 200
 			}
 		},
+
+		// A fantastic crate that gets triggered
+		{
+			'type': 'crate',
+			'label': 'crate_idea',
+			'position': {
+				'x': 210,
+				'y': 260
+			},
+			'server': 1
+		},
+
+		{
+			'type': '%trigger',
+			'on': 'collide',
+			'do': 'throw',
+			'event_params': {
+				'throwee': 'collider',
+				'thrower': 'trigger'
+			},
+			'value_params': {
+				'velocity': {
+					'x': null,
+					'y': -10
+				}
+			},
+			'with': {
+				'entity': {
+					'from_label': 'crate_idea'
+				}
+			}
+
+		},
+
 		// L shape 2
 		{
 			'type': 'platform',

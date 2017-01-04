@@ -52,8 +52,6 @@ ThisPlugin =
 
 	Body:
 		enable_jump_detector: (body) ->
-			console.log "JUMP DETECTOR"
-			console.log body
 			body.canJump = false
 			Matter.Events.on body, 'collisionActive', (ev) ->
 				# console.log 'collisionStart'

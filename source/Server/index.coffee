@@ -12,6 +12,8 @@ Player = require "./Player"
 # Factories
 Entities = Game.Entities
 
+console.log "TODO: Server shouldn't send platforms"
+
 module.exports = class
 	constructor: (@logger) ->
 		@emitter = new Emitter
@@ -33,9 +35,6 @@ module.exports = class
 
 		@loader = new Game.MapLoader
 		@game.install_module @loader
-
-		crate = @game.add_entity 'crate'
-		crate.set_position(200, -400)
 
 		self = @
 		# setInterval () ->
@@ -70,6 +69,7 @@ module.exports = class
 		setInterval () ->
 			# Fetch entities from stage and serialize them
 			entities = self.game.get_entities()
+
 			data = (
 				for entity in entities
 					# TODO: replace with serialize_update

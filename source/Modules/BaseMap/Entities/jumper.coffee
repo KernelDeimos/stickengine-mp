@@ -3,9 +3,11 @@ Matter = require 'matter-js'
 
 Game = require "../../../Game"
 
+Platform = require "../Abstract/Platform"
+
 PlatformRenderable = require "../PlatformRenderable"
 
-class PlatformBase extends Game.Entities.BaseEntity
+class PlatformBase extends Platform
 	setup: (props) ->
 		@velocity = props.velocity
 	get_velocity: () -> @velocity

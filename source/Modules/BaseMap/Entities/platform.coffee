@@ -2,11 +2,13 @@ Matter = require 'matter-js'
 
 Game = require "../../../Game"
 
+Platform = require "../Abstract/Platform"
+
 PlatformRenderable = require "../PlatformRenderable"
 
-class PlatformServer extends Game.Entities.BaseEntity
+class PlatformServer extends Platform
 
-class PlatformClient extends Game.Entities.BaseEntity
+class PlatformClient extends Platform
 	set_renderable: (@renderable) ->
 	get_renderable: () -> return @renderable
 
