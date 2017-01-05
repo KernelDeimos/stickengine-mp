@@ -40,10 +40,14 @@ class StickHumanServer extends StickHumanAbstract
 
 class StickHumanClient extends StickHumanAbstract
 
-	setup: (@renderable, @animable) ->
+	setup: (@renderable, @animable, @talkbubble, @nametag) ->
 		super()
 
 	get_renderable: () -> return @renderable
+
+	say: (text) -> @talkbubble.show_message text
+
+	set_name: (text) -> @nametag.set_text text
 
 	# --- for animations...
 
@@ -64,6 +68,9 @@ class StickHumanClient extends StickHumanAbstract
 
 	update: (deltaT) ->
 		super deltaT
+		# Update talk bubble
+		@talkbubble.update deltaT
+		# Update animation
 		@animable.increment_clock(deltaT)
 		@animable.process()
 
@@ -98,9 +105,15 @@ module.exports = class extends Game.Entities.BaseEntitySF
 
 		renderable = new StickTreeRenderer tree
 		animable = new StickTreeAnimator tree, Data.Animation.StickHuman
+		nametag = new Game.Common.Render.NameTag body, 85
+		talkbubble = new Game.Common.Render.TalkBubble body, 100
+
+		# Add the talk bubble to the main renderable
+		renderable.render_before talkbubble
+		renderable.render_before nametag
 
 		entity = new StickHumanClient('stickhuman', body, id)
-		entity.setup renderable, animable
+		entity.setup renderable, animable, talkbubble, nametag
 		return entity
 
 	_make_body: () ->

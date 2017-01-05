@@ -35,8 +35,15 @@ module.exports = class
 
 			if message.type == 'chat'
 				msg = message.message
-				usr = self.playerMeta.name
-				msg = usr + ': ' + msg;
-				emitter.emit('player.chat', self, msg)
+				# usr = self.playerMeta.name
+				# fulltext = usr + ': ' + msg;
+				# emitter.emit 'player.chat', self, msg, fulltext
+				emitter.emit 'player.chat', self, msg
 
-	get_id: () -> @.entity.get_id().substring(0,6)
+	get_id: () -> @.entity.get_id()
+
+	# Returns meta information that should be shared
+	# with other player's clients.
+	serialize: () ->
+		name: @playerMeta.name
+		uuid: @entity.get_id()

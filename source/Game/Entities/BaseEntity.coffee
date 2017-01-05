@@ -49,3 +49,7 @@ module.exports = class
 
 	set_id: (@uuid) ->
 	get_id: () -> @uuid
+
+	say: () -> # do nothing
+		# On a client class, this should create a
+		# speech bubble using SpeechBubbleRenderable

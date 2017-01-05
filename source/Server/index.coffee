@@ -19,7 +19,7 @@ module.exports = class
 		@emitter = new Emitter
 
 	run: () ->
-		@players = []
+		@players = [] # player objects with methods
 
 		# === Build Engines ===
 		physics = new Game.Engines.Physics
@@ -108,13 +108,27 @@ module.exports = class
 			# 	recipient.send
 			# 		type: 'chat',
 			# 		message: message
-			self._send_message_to_chat message
+			self._send_message_to_chat message, player
 
-	_send_message_to_chat: (text) ->
+		@emitter.on 'player.new', (newPlayer) ->
+			datum = newPlayer.serialize()
+
+			for player in self.players
+				player.send \
+					type: 'player.new',
+					datum: datum
+
+	_send_message_to_chat: (text, player) ->
 		for recipient in @.players
-			recipient.send
-				type: 'chat',
-				message: text
+			recipient.send (
+				if player?
+					type: 'chat',
+					uuid: player.get_id()
+					message: text
+				else
+					type: 'chat',
+					message: text
+			)
 
 	_add_new_player: (ws, meta) ->
 
@@ -129,28 +143,53 @@ module.exports = class
 			playerEntity = self.game.add_entity 'stickhuman'
 			playerEntity.set_position 100, 0
 
-			# Ensure removal of entity on disconnect
+			# Create player record
+			player = new Player ws, playerEntity, meta
+
+			# Ensure removal of player & entity on disconnect
 			ws.on 'close', () ->
+				# Remove entity
 				self.game.rem_entity playerEntity
+
+				# Remove player
+				self.players = \
+					self.players.filter (p) -> p isnt player
 
 				self._send_message_to_chat 'Player disconnect: '+
 					meta.name
 
-			# Create player record
-			player = new Player ws, playerEntity, meta
-
-			# Sent player the "okay, you're in" message
+			# Send initial data to player
 			okayMessage =
 				'type': 'initialize'
-				# send entity id so the player can ignore
-				# creation of its own entity
+				# :: send entity id of player's entity
 				'entity_id': playerEntity.get_id()
+				# :: send meta data of players
+				'players': self._get_players_meta_object player
+				# :: <send created entities>
+				# TODO: separate creation from update
 
 			ws.send JSON.stringify okayMessage
 
-			# Add player to listeners list
-			self.players.push player
-			# Listen to player
-			player.listen(self.emitter)
+			# Tell other players about new player
+			self.emitter.emit 'player.new', player
+
+			# Wait a bit
+			setTimeout ()->				
+
+				# Add player to listeners list
+				self.players.push player
+				# Listen to player
+				player.listen(self.emitter)
+
+			, 100
 
 		ws.on 'message', receiveFirstMessage
+
+	_get_players_meta_object: (additionalPlayer = null) ->
+		result = (
+			for player in @.players
+				player.serialize()
+		)
+		if additionalPlayer?
+			result.push additionalPlayer.serialize()
+		return result

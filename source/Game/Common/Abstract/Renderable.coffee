@@ -4,6 +4,9 @@ module.exports = class
 		@renderAfterList = []
 		@renderBeforeList = []
 
+	render_after: (thing) -> @renderAfterList.push thing
+	render_before: (thing) -> @renderBeforeList.push thing
+
 	# Abstract method to render the thing
 	render: (context) ->
 		@_render_list @renderAfterList, context

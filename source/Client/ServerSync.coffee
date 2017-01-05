@@ -1,5 +1,21 @@
 Lib = require "../Lib"
 
+# Private class for player information
+class Player
+	constructor: (meta, @userconsole, @stage) ->
+		# name, uuid
+		@name = meta.name
+		@uuid = meta.uuid
+	say: (text) ->
+		console.log 'text'
+		# Update talk bubble above entity
+		entity = @stage.get_entity_by_id @uuid
+		if entity == null then return
+		entity.say text
+		# Output some text to the console
+		text = @name + ': ' + text;
+		@userconsole.ouput_message text + "\n"
+
 # This class updates the client's stage when the
 # server sends new information
 
@@ -11,6 +27,7 @@ module.exports = class
 	# @stage the stage for the current game instance
 	constructor: (@ws, @player, @userconsole, @keyboard) ->
 		@playerEntityID = null
+		@players = {} # player data objects; TODO: change
 
 	install: (base) ->
 		@context = base.context
@@ -36,8 +53,12 @@ module.exports = class
 			self.ws.removeListener 'message', receiveInitialize
 
 			# Initialize
+			# :: set player id
 			self.playerEntityID = data.entity_id
 			self.player.set_id data.entity_id
+			# :: set data objects for players
+			for plyr in data.players
+				self._add_player plyr
 
 			console.log "Received ID from server: " + data.entity_id
 
@@ -51,6 +72,17 @@ module.exports = class
 		@ws.on 'open', () ->
 			# Say hello to the server (to get initialization data)
 			self.ws.send 'hello!'
+
+	_add_player: (data) ->
+		key = data.uuid
+		@players[key] = new Player \
+			data, @userconsole, @stage
+		# set nametag on entity
+		self = @
+		setTimeout () ->
+			entity = self.stage.get_entity_by_id key
+			entity.set_name data.name
+		, 300
 
 	_push_player_actions: () ->
 
@@ -77,6 +109,8 @@ module.exports = class
 
 		@ws.on 'message', (message) ->
 			message = JSON.parse message
+
+			# Receive update for entity states
 			if message.type == 'update'
 
 				for datum in message.data
@@ -87,9 +121,27 @@ module.exports = class
 					else
 						entity.deserialize_update datum
 
- 
+			# <Receive new entities >
+			# TODO: Implement on server
 
+			# Receive new players
+			else if message.type == 'player.new'
+				self._add_player message.datum
+
+			# Receive chat messages
 			else if message.type == 'chat'
+				# Check if player message
+				if message.uuid?
+					console.log self.players
+					console.log message.uuid
+					# Check if player is available
+					if message.uuid of self.players
+						# p is the player
+						p = self.players[message.uuid]
+						p.say message.message
+						# player will add message to console
+						return
+				# Add message to console
 				self.userconsole.ouput_message \
 				message.message + "\n"
 			else
