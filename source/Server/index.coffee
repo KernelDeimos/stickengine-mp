@@ -104,10 +104,17 @@ module.exports = class
 					for i in [1..100]
 						crate = self.game.add_entity 'crate'
 
-			for recipient in self.players
-				recipient.send
-					type: 'chat',
-					message: message
+			# for recipient in self.players
+			# 	recipient.send
+			# 		type: 'chat',
+			# 		message: message
+			self._send_message_to_chat message
+
+	_send_message_to_chat: (text) ->
+		for recipient in @.players
+			recipient.send
+				type: 'chat',
+				message: text
 
 	_add_new_player: (ws, meta) ->
 
@@ -121,6 +128,13 @@ module.exports = class
 			# Create an entity for this player
 			playerEntity = self.game.add_entity 'stickhuman'
 			playerEntity.set_position 100, 0
+
+			# Ensure removal of entity on disconnect
+			ws.on 'close', () ->
+				self.game.rem_entity playerEntity
+
+				self._send_message_to_chat 'Player disconnect: '+
+					meta.name
 
 			# Create player record
 			player = new Player ws, playerEntity, meta

@@ -30,8 +30,15 @@ module.exports = class
 			renderable = entity.get_renderable()
 			self._add_renderable renderable
 
+		@stage.on 'stage.rem_entity', (entity) ->
+			renderable = entity.get_renderable()
+			self._rem_renderable renderable
+
 	_add_renderable: (renderable) ->
 		@renderables.push renderable
+
+	_rem_renderable: (renderable) ->
+		@renderables.filter (test) -> test isnt renderable
 
 	_run: (windowObject) ->
 		self = @

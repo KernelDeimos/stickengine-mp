@@ -23,4 +23,7 @@ module.exports = class
 		@stage.add_entity entity
 		return entity
 
+	rem_entity: (entity) ->
+		@stage.rem_entity entity
+
 	get_entities: () -> @stage.get_entities()
