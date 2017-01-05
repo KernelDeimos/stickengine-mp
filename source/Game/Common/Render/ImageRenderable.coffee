@@ -1,9 +1,12 @@
+Renderable = require "../Abstract/Renderable"
+
 # This class renders an image at the position of a Matter-JS body.
-module.exports = class
+module.exports = class extends Renderable
 	constructor: (@body, imgsrc, @width, @height) ->
+		super()
 		@image = new Image
 		@image.src = imgsrc
-	render: (context) ->
+	do_render: (context) ->
 		context.save()
 
 		vertices = @body.vertices;

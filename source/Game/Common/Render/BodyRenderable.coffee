@@ -1,7 +1,10 @@
+Renderable = require "../Abstract/Renderable"
+
 # This class renders a Matter-JS body.
-module.exports = class
+module.exports = class extends Renderable
 	constructor: (@body, @fill=null) ->
-	render: (context) ->
+		super()
+	do_render: (context) ->
 		context.beginPath()
 
 		vertices = @body.vertices;
