@@ -55,6 +55,8 @@ domready(
 					# Update menu (menu will hide)
 					menu.emit 'gameon'
 					# Stop listening to server (this is the clients job)
+					# Note: in the future, a new websocket will be
+					#       provided by the server
 					ws.removeAllListeners();
 					# Start client
 					client = new Client canvas, ws

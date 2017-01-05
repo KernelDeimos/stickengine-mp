@@ -6,9 +6,9 @@ ServerGame = require "./Server"
 
 Game = class
 	constructor: (@name, @instance, @mapname) ->
-	add_player: (ws) ->
+	add_player: (ws, meta) ->
 		self = @
-		self.instance.add_player ws
+		self.instance.add_player ws, meta
 		ws.send JSON.stringify
 			type: 'gameon'
 			mapname: @mapname
@@ -43,8 +43,10 @@ ServerManager = class
 				return
 
 			game = null
+			playerName = null
 
 			if action == 'create'
+				playerName = "Server Host"
 				# Create a game
 				instance = new ServerGame self.logger
 				game = new Game message.name, instance, message.mapname
@@ -59,10 +61,19 @@ ServerManager = class
 				return
 			if action == 'join'
 				game = games[message.index];
+				playerName = message.guest
+				if playerName.toLowerCase() == 'a name'
+					playerName = 'Wise-Ass'
+				playerName = '[Guest] '+playerName
+
 
 			# Add player to game
 			ws.removeListener 'message', recvInput
-			game.add_player ws
+
+			# !! remember that this function goes at
+			#    least three layers down
+			game.add_player ws,
+				name: playerName
 
 		ws.on 'message', recvInput
 

@@ -57,9 +57,9 @@ module.exports = class
 			"to process the command \""+input+"\""
 
 	# Listens to incoming connections
-	add_player: (ws) ->
+	add_player: (ws, meta) ->
 		@logger "New Player!"
-		@_add_new_player ws
+		@_add_new_player ws, meta
 
 	# Pushes updates to players
 	_push: () ->
@@ -104,12 +104,12 @@ module.exports = class
 					for i in [1..100]
 						crate = self.game.add_entity 'crate'
 
-				for recipient in self.players
-					recipient.send
-						type: 'chat',
-						message: message
+			for recipient in self.players
+				recipient.send
+					type: 'chat',
+					message: message
 
-	_add_new_player: (ws) ->
+	_add_new_player: (ws, meta) ->
 
 		self = @
 
@@ -123,7 +123,7 @@ module.exports = class
 			playerEntity.set_position 100, 0
 
 			# Create player record
-			player = new Player ws, playerEntity
+			player = new Player ws, playerEntity, meta
 
 			# Sent player the "okay, you're in" message
 			okayMessage =

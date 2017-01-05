@@ -52,10 +52,16 @@ html
 		#menu.main_menu
 			.screen(data-name='game_select',style='display:block')
 				.header
-					.title Server List
+					.title Join a Game
 					.options
 						button.option.refresh Refresh
 						button.option.sw(data-screen='game_create') Create Server
+				form.form(data-name='player_guest')
+					.entry(data-name='playername')
+						.label Player Name
+						input(name='name', autocomplete="off",
+						placeholder='Type a name here')
+				.title Server List
 				.servers
 					.thead
 						.field Server Name

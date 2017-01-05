@@ -2,7 +2,7 @@ Game = require "../Game"
 
 # Represents a player in a server instance
 module.exports = class
-	constructor: (@ws, @entity) ->
+	constructor: (@ws, @entity, @playerMeta) ->
 		@controller = new Game.Misc.CreatureController @entity
 
 	# Send data through player's websocket
@@ -35,8 +35,8 @@ module.exports = class
 
 			if message.type == 'chat'
 				msg = message.message
-				# msg = \
-				# '['+self.entity.get_id().substring(0,6)+'] '+ msg
+				usr = self.playerMeta.name
+				msg = usr + ': ' + msg;
 				emitter.emit('player.chat', self, msg)
 
 	get_id: () -> @.entity.get_id().substring(0,6)

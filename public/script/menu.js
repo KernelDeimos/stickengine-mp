@@ -3,14 +3,43 @@ $(document).ready(function () {
 	// Obtain menu from document
 	var menu = $("#menu");
 
+	var menu_form_to_data = function (formName) {
+		var form = menu.find('.form[data-name='+formName+']').first();
+
+		data = {}
+		// JQuery serialize but then convert that to map
+		dataInterm = form.serializeArray();
+		dataInterm.forEach(function (datum) {
+			data[datum.name] = datum.value;
+		});
+
+		return data;
+	}
+
 	var bind_server_buttons = function () {
 		// When server is clicked, send back server index
 		menu.find('.server').on('click', function () {
 			var item = $(this);
 
+			// Get player name
+			var playerName;
+			// :: serialize form with name player_guest
+			data = menu_form_to_data('player_guest');
+			// :: verify that name is present
+			if (data.name == '') {
+				// :: complain to user and quit
+				alert('You gotta type a name first');
+				return;
+			}
+			// :: set player name from form data
+			playerName = data.name;
+
+			// Create data object
+
 			data = {
 				action: 'join',
-				index: item.find('input[name=index]').first().val()
+				index: item.find('input[name=index]').first().val(),
+				guest: playerName
 			}
 
 			// Invoke the game client's menu interface
@@ -71,14 +100,10 @@ $(document).ready(function () {
 		// When .action buttons are clicked, invoke the client
 		menu.find('.submit').on('click', function () {
 			var formName = $(this).data('form');
-			var form = menu.find('.form[data-name='+formName+']').first();
 
-			data = {}
-			// JQuery serialize but then convert that to map
-			dataInterm = form.serializeArray();
-			dataInterm.forEach(function (datum) {
-				data[datum.name] = datum.value;
-			});
+			// Serialize the form
+			data = menu_form_to_data(formName);
+
 			// Invoke the game client's menu interface
 			window.menu.emit('do', data);
 		})
