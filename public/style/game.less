@@ -27,13 +27,16 @@
 }
 .trytheme('lite');
 
+@col_game_term_bg: rgba(255,255,255,0.4);
+@col_game_term_fg: rgb(0,0,0);
+
 BODY {
 	background-color: @col_bg_accent;
 }
 
 /* === Terminal === */
 .main_terminal {
-	z-index: 2;
+	z-index: 4;
 	position: absolute;
 	top: 0; left: 0;
 	width: 100%;
@@ -64,9 +67,28 @@ BODY {
 	padding: 5pt;
 }
 
+.persist_terminal {
+	z-index: 2;
+	font: 12px "Lucida Console", Helvetica, Arial, sans-serif;
+	position: absolute;
+	top: 0; left: 0;
+	width: 50%;
+	height: 100pt;
+	color: @col_game_term_fg;
+	padding: 15pt;
+	.contents {
+		display: inline;
+		span {
+			background-color: @col_game_term_bg;
+		}
+		white-space: pre-wrap;
+		overflow-y: auto;
+	}
+}
+
 /* === Menu === */
 .main_menu {
-	z-index: 2;
+	z-index: 3;
 	position: absolute;
 	top: 0; left: 0;
 	width: 100%;

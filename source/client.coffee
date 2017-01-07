@@ -34,7 +34,7 @@ domready(
 
 			# Connect to server
 			# ws = new WebSocket 'ws://127.0.0.1:8232'
-			ws = new WebSocket 'ws://135.23.32.56:8232'
+			ws = new WebSocket 'ws://127.0.0.1:8232'
 
 			ws.on 'open', () ->
 				menu.emit 'connected'

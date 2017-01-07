@@ -7,8 +7,11 @@ function TerminalGUI() {
 TerminalGUI.prototype._bind = function() {
 	var self = this;
 
-	self.termElem = $('#term');
+	self.termPersistElem = $('#term .persist_terminal')
+	self.termElem = $('#term .main_terminal');
 	self.term = window.term;
+
+	self.termState = 'open'
 
 	// Handle new console
 	term.on('new_game', function (console, game) {
@@ -21,12 +24,20 @@ TerminalGUI.prototype._bind = function() {
 	$(window).keypress(function (evt) {
 		self.handle_keypress(evt);
 	});
+
+	// Hide the terminal when input is blurred
+	self.termElem.find('.input').first().blur(function () {
+		if (self.termState == 'open') {
+			self._close_term();
+		}
+	});
 };
 
 /** Listen for console messages */
 TerminalGUI.prototype._listen = function() {
 	var self = this;
 	self.console.on('ouput', function (message) {
+		// Output to main terminal
 		var outbox = self.termElem.find('.contents');
 		outbox.append(
 			message
@@ -34,8 +45,33 @@ TerminalGUI.prototype._listen = function() {
 		outbox.animate({
 			scrollTop: outbox[0].scrollHeight
 		}, 200);
+
+		// Output to persisting terminal
+		var outbox = self.termPersistElem.find('.contents');
+		var mbox = $(document.createElement('span'));
+		mbox.html(message)
+		outbox.append(
+			mbox
+		);
+		// -- this doesn't work for some reason;
+		outbox.animate({
+			scrollTop: outbox[0].scrollHeight
+		}, 200);
+		setTimeout(function () {
+			mbox.fadeOut(1000);
+		}, 7000)
 	})
 };
+
+TerminalGUI.prototype._close_term = function () {
+	var self = this;
+	self.termState = 'closed'
+	// Re-enable game inputs and blur terminal
+	if (self.game != null) self.game.accept_inputs();
+	self.termElem.slideToggle(200)
+	self.termPersistElem.show();
+	self.termElem.find('.input').first().blur();
+}
 
 TerminalGUI.prototype.handle_keypress = function(evt) {
 	var self = this;
@@ -48,17 +84,17 @@ TerminalGUI.prototype.handle_keypress = function(evt) {
 	if (evt.which == 96 || evt.which == 126) {
 		// If we're going to show the terminal
 		if (termElem.is(':hidden')) {
+			self.termState = 'open'
 			// Ignore inputs and focus terminal
 			if (game != null) game.ignore_inputs();
 			termElem.slideToggle(200)
+			self.termPersistElem.hide()
 			termElem.find('.input').first().focus();
 		}
 		// If we're going to hide the terminal
 		else {
 			// Re-enable game inputs and blur terminal
-			if (game != null) game.accept_inputs();
-			termElem.slideToggle(200)
-			termElem.find('.input').first().blur();
+			self._close_term();
 		}
 
 		// Don't propogate '`' to terminal input
@@ -75,6 +111,8 @@ TerminalGUI.prototype.handle_keypress = function(evt) {
 			inputO.html('');
 			cons.enter_command(input);
 		}
+		// Re-enable game inputs and blur terminal
+		self._close_term();
 		// Don't propogate "\n" to terminal input
 		evt.preventDefault();
 		return false;

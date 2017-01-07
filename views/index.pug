@@ -84,9 +84,12 @@ html
 						input(name='mapname', autocomplete="off")
 				.actions
 					button.action.submit(data-form='game_create_form') Start Game
-		#term.main_terminal
-			.contents
-				| Say hello!
-				| Note: nobody will see your message until the open chat. (that's gonna be fixed soon)
-				= "\n"
-			.input(contenteditable=true)
+		#term
+			.persist_terminal
+				.contents
+			.main_terminal
+				.contents
+					| Say hello!
+					| Note: nobody will see your message until the open chat. (that's gonna be fixed soon)
+					= "\n"
+				.input(contenteditable=true)
