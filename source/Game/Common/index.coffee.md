@@ -9,5 +9,6 @@ This module contains common classes that any game module may use.
 		Render:
 			BodyRenderable: require "./Render/BodyRenderable"
 			ImageRenderable: require "./Render/ImageRenderable"
+			StateRenderable: require "./Render/StateRenderable"
 			TalkBubble: require "./Render/TalkBubble"
 			NameTag: require "./Render/NameTag"

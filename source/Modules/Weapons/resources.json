@@ -1,0 +1,14 @@
+{
+	"wep/firstgun": {
+		"location": "/images/wep/firstgun.png",
+		"scale": [52,32],
+		"handl": [40,12],
+		"handr": null,
+		"end": [8,8],
+		"size": 5
+	},
+	"proj/stdbullet": {
+		"location": "/images/proj/stdbullet.png",
+		"size": 5
+	}
+}

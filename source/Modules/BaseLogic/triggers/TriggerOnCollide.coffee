@@ -5,6 +5,7 @@ class OnCollide extends Logic.Trigger
 
 	constructor: (base) ->
 		@events = base.events
+		@lastTS = 0
 		super
 
 	activate: (params) ->
@@ -16,6 +17,12 @@ class OnCollide extends Logic.Trigger
 
 		# Make collide callback
 		fCollide = (event) ->
+			# Ensure this isn't a double-trigger
+			ts = event.source.timing.timestamp
+			if ts - @lastTS < 0.1
+				return
+			@lastTS = ts
+
 			# Create event for action
 			ev = {
 				'trigger': params.entity,

@@ -191,6 +191,14 @@ map = {
 				'h': 260
 			}
 		},
+		{
+			'type': 'weapon',
+			'options': {
+				'weapon': 'firstgun',
+				'x': 560,
+				'y': -170
+			}
+		},
 
 		// Jump platform
 		{

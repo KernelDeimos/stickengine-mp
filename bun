@@ -14,6 +14,7 @@ coffee --compile --output processed/ source/
 echo "[2] Copying pure source"
 cd source
 cp --parents `find -name \*.js` ../processed/
+cp --parents `find -name \*.json` ../processed/
 cd ..
 echo "[3] Deploying client code to ./public/bundle.js"
 # Bundle using browserify

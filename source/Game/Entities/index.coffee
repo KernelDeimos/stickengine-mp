@@ -3,3 +3,4 @@ module.exports =
 	BaseEntitySF: require "./BaseEntitySF"
 	BaseEntity: require "./BaseEntity"
 	BaseEntityCreature: require "./BaseEntityCreature"
+	BaseEntityItem: require "./BaseEntityItem"

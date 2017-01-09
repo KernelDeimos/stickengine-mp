@@ -19,6 +19,12 @@ class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 	setup: () ->
 		@animation = 'none'
 
+		@on 'receive_item.weapon', (weapon, next) ->
+			console.log "Got weapon!"
+			console.log weapon
+			# Inform item that this was handled
+			next()
+
 	serialize_update: () ->
 		data = super()
 		Object.assign data,
@@ -40,8 +46,18 @@ class StickHumanServer extends StickHumanAbstract
 
 class StickHumanClient extends StickHumanAbstract
 
-	setup: (@renderable, @animable, @talkbubble, @nametag) ->
+	setup: (
+		@renderable, @animable
+		@talkbubble, @nametag, @weaponrender
+	) ->
 		super()
+		@on 'receive_item.weapon', (weapon, next) ->
+			# Create renderable for weapon
+			sprite = weapon.sprite
+			render = new Game.Common.Render.ImageRenderable \
+				@body, sprite.location, sprite.scale[0],
+				sprite.scale[1]
+			@weaponrender.set_renderable render
 
 	get_renderable: () -> return @renderable
 
@@ -108,12 +124,16 @@ module.exports = class extends Game.Entities.BaseEntitySF
 		nametag = new Game.Common.Render.NameTag body, 85
 		talkbubble = new Game.Common.Render.TalkBubble body, 100
 
+		weaponrender = new Game.Common.Render.StateRenderable null
+
 		# Add the talk bubble to the main renderable
 		renderable.render_before talkbubble
 		renderable.render_before nametag
+		renderable.render_before weaponrender
 
 		entity = new StickHumanClient('stickhuman', body, id)
-		entity.setup renderable, animable, talkbubble, nametag
+		entity.setup renderable, animable,
+			talkbubble, nametag, weaponrender
 		return entity
 
 	_make_body: () ->
