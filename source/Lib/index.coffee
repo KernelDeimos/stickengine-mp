@@ -3,3 +3,4 @@ module.exports =
 	Console: require "./Console"
 	Utilities: require "./Utilities"
 	Geo: require "./Geo"
+	CanvasElementFactory: require "./CanvasElementFactory"

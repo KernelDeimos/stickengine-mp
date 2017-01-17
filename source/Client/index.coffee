@@ -38,9 +38,10 @@ module.exports = class
 
 		# === POST GAME INITIALIZATION ===
 
-		# Instanciate keyboard
+		# Instanciate keyboard and mouse
 		keyboard = new Game.Misc.InputHandler
 		keyboard.bind document
+		mouse = new Game.Misc.CanvasMouseHandler @canvas
 
 		# Instanciate server synchronizer
 		serversync = new ServerSync @ws, player, @userconsole, keyboard
@@ -50,7 +51,7 @@ module.exports = class
 		# Expose keyboard for enable and disable functions
 		@keyboard = keyboard
 
-		@_poll_inputs keyboard, player
+		@_poll_inputs player, keyboard, mouse
 
 	load_map: (mapData) ->
 		@loader.load_map mapData
@@ -67,11 +68,33 @@ module.exports = class
 	ignore_inputs: () -> @keyboard.disable()
 	accept_inputs: () -> @keyboard.enable()
 
-	_poll_inputs: (keyboard, player) ->
+	_poll_inputs: (player, keyboard, mouse) ->
 
 		controller = new Game.Misc.CreatureController player
+
+		self = @
 
 		setInterval () ->
 			for ctrl in keyboard.get_events()
 				controller.update_control ctrl.name, ctrl.state
+
+			# Update aim angle
+			mpos = mouse.get_coordinates()
+			ydiff = mpos.y - self.canvas.height/2
+			xdiff = mpos.x - self.canvas.width/2
+			angle = Math.atan ydiff / xdiff
+			if xdiff < 0 then angle += Math.PI
+			player.set_angle angle
 		, 10
+
+		setInterval () ->
+			# console.log player.aimAngle
+			mpos = mouse.get_coordinates()
+			ydiff = mpos.y - self.canvas.height/2
+			xdiff = mpos.x - self.canvas.width/2
+			angle = Math.atan ydiff / xdiff
+			if xdiff < 0 then angle += Math.PI
+			# console.log [xdiff , ydiff]
+			console.log angle*360/(2*Math.PI)
+		, 500
+

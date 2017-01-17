@@ -11,12 +11,15 @@ StickTree = require "../StickTree"
 StickTreeRenderer = require "../StickTreeRenderer"
 StickTreeAnimator = require "../StickTreeAnimator"
 
+StickTreeAimAnimator = require "../StickTreeAimAnimator"
+
 # Data
 Data = require "../Data"
 
 class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 
 	setup: () ->
+		@aimAngle = 0
 		@animation = 'none'
 
 		@on 'receive_item.weapon', (weapon, next) ->
@@ -29,7 +32,10 @@ class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 		data = super()
 		Object.assign data,
 			animation: @animation
+			aimAngle: @aimAngle
 		return data
+
+	set_angle: (@aimAngle) ->
 
 
 class StickHumanServer extends StickHumanAbstract
@@ -47,17 +53,27 @@ class StickHumanServer extends StickHumanAbstract
 class StickHumanClient extends StickHumanAbstract
 
 	setup: (
-		@renderable, @animable
+		@renderable, @animable, @tree
+		@aimer
 		@talkbubble, @nametag, @weaponrender
 	) ->
 		super()
+
+		@currentWeaponSprite = null
+		self = @
+
 		@on 'receive_item.weapon', (weapon, next) ->
 			# Create renderable for weapon
 			sprite = weapon.sprite
-			render = new Game.Common.Render.ImageRenderable \
-				@body, sprite.location, sprite.scale[0],
-				sprite.scale[1]
+			larm = @tree.get_limb_by_name 'left_lower_arm'
+			larm = larm.get_line()
+			render = new Game.Common.Render.SpriteRenderable \
+				sprite, larm.get_node()
+			self.currentWeaponSprite = render
+				# larm.get_node(), larm,
+				# sprite.location, sprite.scale[0], sprite.scale[1]
 			@weaponrender.set_renderable render
+			@aimer.activate()
 
 	get_renderable: () -> return @renderable
 
@@ -89,6 +105,10 @@ class StickHumanClient extends StickHumanAbstract
 		# Update animation
 		@animable.increment_clock(deltaT)
 		@animable.process()
+		@aimer.process @aimAngle
+
+		if @currentWeaponSprite?
+			@currentWeaponSprite.set_angle @aimAngle
 
 	walk: (direction) ->
 		super direction
@@ -117,14 +137,20 @@ module.exports = class extends Game.Entities.BaseEntitySF
 	# Make client version of the entity
 	make_client: (id, props) ->
 		body = @_make_body()
+
+		# Let t be the sticktree
 		tree = @_make_tree body
 
+		# RENDER
 		renderable = new StickTreeRenderer tree
-		animable = new StickTreeAnimator tree, Data.Animation.StickHuman
 		nametag = new Game.Common.Render.NameTag body, 85
 		talkbubble = new Game.Common.Render.TalkBubble body, 100
-
 		weaponrender = new Game.Common.Render.StateRenderable null
+
+		# ANIMATE
+		animable = new StickTreeAnimator tree,
+			Data.Animation.StickHuman
+		aimanimable = new StickTreeAimAnimator tree, weaponrender
 
 		# Add the talk bubble to the main renderable
 		renderable.render_before talkbubble
@@ -132,7 +158,8 @@ module.exports = class extends Game.Entities.BaseEntitySF
 		renderable.render_before weaponrender
 
 		entity = new StickHumanClient('stickhuman', body, id)
-		entity.setup renderable, animable,
+		entity.setup renderable, animable, tree,
+			aimanimable,
 			talkbubble, nametag, weaponrender
 		return entity
 
@@ -219,4 +246,4 @@ module.exports = class extends Game.Entities.BaseEntitySF
 				new Geo.Line(foot[s], 36, a4)
 			)
 
-		return stickTree;
+		return stickTree

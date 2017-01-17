@@ -9,8 +9,6 @@ module.exports = class extends Renderable
 	do_render: (context) ->
 		context.save()
 
-		vertices = @body.vertices;
-
 		context.moveTo(0,0);
 		pos = @body.position;
 

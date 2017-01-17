@@ -2,9 +2,10 @@
 	"wep/firstgun": {
 		"location": "/images/wep/firstgun.png",
 		"scale": [52,32],
-		"handl": [40,12],
-		"handr": null,
-		"end": [8,8],
+		"origin": [40,12],
+		"nodes": {
+			"end": [8,8]
+		},
 		"size": 5
 	},
 	"proj/stdbullet": {
