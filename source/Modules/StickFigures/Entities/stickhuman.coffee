@@ -22,9 +22,14 @@ class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 		@aimAngle = 0
 		@animation = 'none'
 
+		@currentWeapon = null
+
+		self = @
+
 		@on 'receive_item.weapon', (weapon, next) ->
 			console.log "Got weapon!"
 			console.log weapon
+			self.currentWeapon = weapon
 			# Inform item that this was handled
 			next()
 
@@ -40,6 +45,14 @@ class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 
 class StickHumanServer extends StickHumanAbstract
 
+	setup: (@api) ->
+		super()
+
+		@sprite = null
+
+		@on 'receive_item.weapon', (weapon, next) ->
+			@sprite = weapon.sprite
+
 	walk: (direction) ->
 		super direction
 		if direction == 'left'
@@ -48,6 +61,18 @@ class StickHumanServer extends StickHumanAbstract
 			@animation = 'right'
 		else
 			@animation = 'none'
+
+	hold_trigger: () ->
+		console.log "Hold trigger on server"
+		if @currentWeapon?
+			console.log "Firing!"
+			@currentWeapon.fire @api, @_get_bullet_pos(), @aimAngle
+
+	_get_bullet_pos: () ->
+		# TODO: distance away based on aim angle
+		bulletPos =
+			x: @body.position.x
+			y: @body.position.y
 
 
 class StickHumanClient extends StickHumanAbstract
@@ -131,7 +156,7 @@ module.exports = class extends Game.Entities.BaseEntitySF
 	make_server: (id, props) ->
 		body = @_make_body()
 		entity = new StickHumanServer('stickhuman', body, id)
-		entity.setup()
+		entity.setup(@api)
 		return entity
 
 	# Make client version of the entity

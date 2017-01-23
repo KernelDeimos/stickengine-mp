@@ -6,7 +6,7 @@ class ThisModule extends Game.Modules.BaseModule
 	install: (base) ->
 		# Add entity subfactories
 		for type of Entities
-			factory = new Entities[type] base.context
+			factory = new Entities[type] base
 			base.entities.register_entity type, factory
 
 module.exports = new ThisModule

@@ -10,3 +10,8 @@ module.exports = class
 		name: 'firstgun'
 		sprite: resources['wep/firstgun']
 		bullet: 'bullet_std'
+		fire: (api, position, angle) ->
+			bull = api.entities.make('bullet_std')
+			bull.set_position position.x, position.y
+			bull.set_angle angle
+			api.stage.add_entity bull

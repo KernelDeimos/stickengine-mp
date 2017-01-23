@@ -41,3 +41,6 @@ module.exports = class extends BaseEntity
 	is_walking: () ->
 		if @walking == 0 then return false
 		else return @walking
+
+	hold_trigger: () ->
+	lift_trigger: () ->
