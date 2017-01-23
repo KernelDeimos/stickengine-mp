@@ -44,7 +44,8 @@ module.exports = class
 		mouse = new Game.Misc.CanvasMouseHandler @canvas
 
 		# Instanciate server synchronizer
-		serversync = new ServerSync @ws, player, @userconsole, keyboard
+		serversync = new ServerSync @ws, player, @userconsole,
+			keyboard, mouse
 		@game.install_module serversync
 		serversync.activate()
 

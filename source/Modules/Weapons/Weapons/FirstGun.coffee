@@ -14,4 +14,10 @@ module.exports = class
 			bull = api.entities.make('bullet_std')
 			bull.set_position position.x, position.y
 			bull.set_angle angle
-			api.stage.add_entity bull
+			setTimeout () ->
+				api.stage.add_entity bull
+				bull.fire()
+			, 200
+			setTimeout () ->
+				api.stage.rem_entity bull
+			, 2000

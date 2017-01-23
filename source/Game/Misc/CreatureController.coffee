@@ -32,3 +32,5 @@ module.exports = class
 			@creature.hold_trigger()
 		if name == 'space' and up
 			@creature.lift_trigger()
+
+	update_aim: (angle) -> @creature.set_angle angle

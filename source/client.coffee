@@ -6,6 +6,8 @@ Resources = require "./Resources"
 
 Client = require "./Client"
 
+# require "./polyfills"
+
 class Menu extends Emitter
 	constructor: (@menu) ->
 

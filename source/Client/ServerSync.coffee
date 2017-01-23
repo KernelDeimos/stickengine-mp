@@ -25,7 +25,7 @@ module.exports = class
 	# @param ws an established websocket connection
 	# @entities entity factory
 	# @stage the stage for the current game instance
-	constructor: (@ws, @player, @userconsole, @keyboard) ->
+	constructor: (@ws, @player, @userconsole, @keyboard, @mouse) ->
 		@playerEntityID = null
 		@players = {} # player data objects; TODO: change
 
@@ -95,6 +95,16 @@ module.exports = class
 				state: state
 			self.ws.send JSON.stringify updateMessage
 
+		setInterval () ->
+			# Get player angle
+			angle = self.player.get_angle()
+			# Send server an update with the angle
+			updateMessage =
+				type: 'mouse',
+				angle: angle
+			self.ws.send JSON.stringify updateMessage
+		, 30
+
 	_push_player_messages: () ->
 		self = @
 
@@ -120,6 +130,10 @@ module.exports = class
 						self.stage.add_entity entity
 					else
 						entity.deserialize_update datum
+
+			else if message.type == 'remove'
+				entity = self.stage.get_entity_by_id message.uuid
+				self.stage.rem_entity entity
 
 			# <Receive new entities >
 			# TODO: Implement on server

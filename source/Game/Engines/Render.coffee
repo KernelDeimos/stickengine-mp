@@ -38,7 +38,12 @@ module.exports = class
 		@renderables.push renderable
 
 	_rem_renderable: (renderable) ->
-		@renderables.filter (test) -> test isnt renderable
+		console.log "Remove renderable"
+		# @renderables.filter (test) -> not (test == renderable)
+		console.log renderable
+		for test, i in @renderables
+			console.log test
+			@renderables.splice i, 1 if test == renderable
 
 	_run: (windowObject) ->
 		self = @

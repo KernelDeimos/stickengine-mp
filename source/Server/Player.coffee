@@ -33,6 +33,9 @@ module.exports = class
 				self.controller.update_control \
 					message.control, message.state
 
+			if message.type == 'mouse'
+				self.controller.update_aim message.angle
+
 			if message.type == 'chat'
 				msg = message.message
 				# usr = self.playerMeta.name

@@ -9,14 +9,23 @@ Geo = Lib.Geo
 resources = require "../resources"
 
 class BaseBullet extends Game.Entities.BaseEntity
-	set_angle: (angle) ->
+	set_angle: (@angle) ->
 		console.log "Angle:"
-		console.log angle
-		Body.setAngle(@body, angle)
+		console.log @angle
+		Body.setAngle(@body, @angle)
+	fire: () ->
+		vel =
+			x: 50*Math.cos(@angle)
+			y: 50*Math.sin(@angle)
+		Body.setVelocity(@body, vel)
 class BulletServer extends BaseBullet
 class BulletClient extends BaseBullet
 	setup: (@renderable) ->
 	get_renderable: () -> return @renderable
+	# set_angle: (angle) ->
+	# 	console.log "Angle:"
+	# 	console.log angle
+	# 	Body.setAngle(@body, angle)
 
 module.exports = class extends Game.Entities.BaseEntitySF
 	# Make server version of the entity
@@ -34,6 +43,11 @@ module.exports = class extends Game.Entities.BaseEntitySF
 		console.log sprite
 		renderable = new Game.Common.Render.ImageRenderable \
 			body, sprite.location, sprite.scale[0], sprite.scale[1]
+		# bodyPositionAdapter =
+		# 	get_position: () ->
+		# 		result = body.position
+		# renderable = new Game.Common.Render.SpriteRenderable \
+		# 		sprite, bodyPositionAdapter
 		entity = new BulletClient 'bullet_std', body, id
 		entity.setup renderable
 		return entity

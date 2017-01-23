@@ -41,6 +41,7 @@ class StickHumanAbstract extends Game.Entities.BaseEntityCreature
 		return data
 
 	set_angle: (@aimAngle) ->
+	get_angle: () -> return @aimAngle
 
 
 class StickHumanServer extends StickHumanAbstract

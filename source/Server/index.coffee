@@ -65,6 +65,23 @@ module.exports = class
 	_push: () ->
 		self = @
 
+		# Engine to update user with stage events
+		@game.add_engine new (class
+			activate: (context, stage) -> stage.on \
+				'stage.rem_entity', (entity) ->
+					for player in self.players
+						# Send serialized data
+						try
+							player.send
+								type: 'remove',
+								uuid: entity.uuid
+
+						catch err
+							# Remove player
+							self.players = \
+								self.players.filter (p) -> p isnt player
+		)
+
 		# Push new positions at regular interval
 		setInterval () ->
 			# Fetch entities from stage and serialize them
