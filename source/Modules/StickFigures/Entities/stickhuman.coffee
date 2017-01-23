@@ -123,6 +123,7 @@ class StickHumanClient extends StickHumanAbstract
 				@animable.stop_animation  'walk_right'
 				@animable.stop_animation  'walk_left'
 			@animation = datum.animation
+		@aimAngle = datum.aimAngle
 
 	update: (deltaT) ->
 		super deltaT

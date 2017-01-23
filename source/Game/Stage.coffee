@@ -19,15 +19,12 @@ module.exports = class extends Emitter
 
 	# @param [Object] entity  any subclass of BaseEntity
 	rem_entity: (entity) ->
-		console.log "Removing entity"
-		console.log entity.uuid
-		uuid = entity.uuid
 
 		# @entities = @entities.filter (ent) ->
 		# 	console.log ent.uuid
 		# 	return ent.uuid != entity.uuid
-		for i, ent in @entities
-		    @entities.splice i, 1 if ent.uuid == uuid
+		for ent, i in @entities
+		    @entities.splice i, 1 if ent is entity
 
 		@emit('stage.rem_entity', entity)
 		

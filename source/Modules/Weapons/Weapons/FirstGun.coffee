@@ -20,4 +20,4 @@ module.exports = class
 			, 200
 			setTimeout () ->
 				api.stage.rem_entity bull
-			, 2000
+			, 9000

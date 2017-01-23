@@ -53,7 +53,8 @@ module.exports = class extends Game.Entities.BaseEntitySF
 		return entity
 
 	_make_body: () ->
-		body = Bodies.rectangle(0, 0, 19, 7)
+		body = Bodies.rectangle(0, 0, 30, 7)
+		Body.setDensity(body, 0.1)
 		Lib.Body.set_can_rotate(body, false)
 		return body
 		
