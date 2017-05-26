@@ -19,7 +19,13 @@ module.exports = class extends Emitter
 
 	# @param [Object] entity  any subclass of BaseEntity
 	rem_entity: (entity) ->
-		@entities = @entities.filter (ent) -> ent isnt entity
+
+		# @entities = @entities.filter (ent) ->
+		# 	console.log ent.uuid
+		# 	return ent.uuid != entity.uuid
+		for ent, i in @entities
+		    @entities.splice i, 1 if ent is entity
+
 		@emit('stage.rem_entity', entity)
 		
 		type = entity.get_type()

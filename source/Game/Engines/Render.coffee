@@ -38,7 +38,9 @@ module.exports = class
 		@renderables.push renderable
 
 	_rem_renderable: (renderable) ->
-		@renderables.filter (test) -> test isnt renderable
+		# @renderables.filter (test) -> not (test == renderable)
+		for test, i in @renderables
+			@renderables.splice i, 1 if test == renderable
 
 	_run: (windowObject) ->
 		self = @

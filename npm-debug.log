@@ -9,7 +9,7 @@
 6 silly lifecycle cowlaunch@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle cowlaunch@0.0.0~start: cowlaunch@0.0.0
 8 verbose lifecycle cowlaunch@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle cowlaunch@0.0.0~start: PATH: /home/eric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/bin/node-gyp-bin:/var/www/html/projects/stick-engine-mp/node_modules/.bin:/home/eric/.nvm/versions/node/v6.9.1/bin:/home/eric/bin:/home/eric/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/processing
+9 verbose lifecycle cowlaunch@0.0.0~start: PATH: /home/eric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/bin/node-gyp-bin:/var/www/html/projects/stick-engine-mp/node_modules/.bin:/home/eric/.nvm/versions/node/v6.9.1/bin:/home/eric/.local/share/umake/bin:/home/eric/bin:/home/eric/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/processing:/home/eric/Android/Sdk/platform-tools:/home/eric/Android/Sdk/tools
 10 verbose lifecycle cowlaunch@0.0.0~start: CWD: /var/www/html/projects/stick-engine-mp
 11 silly lifecycle cowlaunch@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle cowlaunch@0.0.0~start: Returned: code: 1  signal: null
@@ -26,7 +26,7 @@
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid cowlaunch@0.0.0
 16 verbose cwd /var/www/html/projects/stick-engine-mp
-17 error Linux 4.4.0-57-generic
+17 error Linux 4.4.0-59-generic
 18 error argv "/home/eric/.nvm/versions/node/v6.9.1/bin/node" "/home/eric/.nvm/versions/node/v6.9.1/bin/npm" "start"
 19 error node v6.9.1
 20 error npm  v3.10.8

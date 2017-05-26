@@ -2,7 +2,7 @@ module.exports = {}
 
 # Base class for triggers to extend
 module.exports.Trigger = class
-	constructor: () ->
+	constructor: (@base, @options) ->
 		# Map action parameters to event parameters
 		@params_events = {}
 
@@ -58,7 +58,7 @@ module.exports.Trigger = class
 
 # Base class for actions to extend
 module.exports.Action = class
-	constructor: () ->
+	constructor: (@base, @options) ->
 		@debuginfo =
 			type: "Action"
 			name: "Abstract"

@@ -10,6 +10,7 @@
 	},
 	"proj/stdbullet": {
 		"location": "/images/proj/stdbullet.png",
+		"scale": [19,7],
 		"size": 5
 	}
 }
