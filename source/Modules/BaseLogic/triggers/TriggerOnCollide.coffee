@@ -4,9 +4,9 @@ Logic = Game.Logic
 class OnCollide extends Logic.Trigger
 
 	constructor: (base) ->
+		super()
 		@events = base.events
 		@lastTS = 0
-		super
 
 	activate: (params) ->
 		console.log "Activating trigger"
@@ -19,9 +19,9 @@ class OnCollide extends Logic.Trigger
 		fCollide = (event) ->
 			# Ensure this isn't a double-trigger
 			ts = event.source.timing.timestamp
-			if ts - @lastTS < 0.1
+			if ts - self.lastTS < 0.1
 				return
-			@lastTS = ts
+			self.lastTS = ts
 
 			# Create event for action
 			ev = {

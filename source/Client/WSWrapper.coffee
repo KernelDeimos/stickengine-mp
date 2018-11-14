@@ -3,6 +3,7 @@ Emitter = require "events"
 # Wrapper for WebSocket to match node-ws' interface
 module.exports = class extends Emitter
 	constructor: (url) ->
+		super()
 		@ws = new WebSocket(url)
 
 		self = @

@@ -2,6 +2,7 @@ Lib = require "../Lib"
 
 module.exports = class extends Lib.Console
 	constructor: () ->
+		super()
 		self = @
 		# Echo user input
 		# @.on 'input', (msg) ->

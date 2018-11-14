@@ -4,6 +4,7 @@ Emitter = require("events")
 module.exports = class extends Emitter
 
 	constructor: () ->
+		super()
 
 		@KEYSTATE_DOWN = 'down'
 		@KEYSTATE_UP = 'up'

@@ -6,13 +6,14 @@ Lib = require "../../Lib" # For serializing body
 # An entity has a type, body, and id.
 # Additionally, any entity is an emitter. This is so
 # that game modules can send their own events to entities
-# in such a way that allows for "soft dependancies". i.e.,
+# in such a way that allows for "weak dependancies". i.e.,
 # an entity can provide extra functionality if it receives
 # an event from a certain module, but if that module is not
 # loaded the entity will still function as normal.
 module.exports = class extends Emitter
 
 	constructor: (@type, @body, @uuid) ->
+		super()
 
 	get_type: () -> @type
 	get_body: () -> @body

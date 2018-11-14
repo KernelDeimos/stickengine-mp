@@ -7,6 +7,7 @@ Emitter = require 'events'
 # any listeners that an entity was added.
 module.exports = class extends Emitter
 	constructor: () ->
+		super()
 		@entities = []
 
 	# @param [Object] entity  any subclass of BaseEntity
@@ -24,7 +25,7 @@ module.exports = class extends Emitter
 		# 	console.log ent.uuid
 		# 	return ent.uuid != entity.uuid
 		for ent, i in @entities
-		    @entities.splice i, 1 if ent is entity
+			@entities.splice i, 1 if ent is entity
 
 		@emit('stage.rem_entity', entity)
 		

@@ -10,9 +10,11 @@ Client = require "./Client"
 
 class Menu extends Emitter
 	constructor: (@menu) ->
+		super()
 
 class Term extends Emitter
 	constructor: (@menu) ->
+		super()
 
 
 domready(
@@ -35,10 +37,7 @@ domready(
 			console.log 'client menu ready'
 
 			# Connect to server
-			# ws = new WebSocket 'ws://127.0.0.1:8232'
-			ws = new WebSocket 'ws://127.0.0.1:8232'
-			# ws = new WebSocket 'ws://192.168.0.11:8232'
-			# ws = new WebSocket 'ws://99.253.1.142:8232'
+			ws = new WebSocket 'ws://'+window.location.hostname+':8232';
 
 			ws.on 'open', () ->
 				menu.emit 'connected'

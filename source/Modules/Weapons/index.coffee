@@ -14,7 +14,8 @@ class ThisModule extends Game.Modules.BaseModule
 			factory = new Actions[type] base
 			base.actions.add_factory type, factory
 
-		## Rule: Jumping platforms should launch things
+		# Define what happens when an entity of type 'weapon' is added to the
+		# map.
 		base.stage.on 'stage.add_entity.weapon', (weaponItem) ->
 			trig = base.triggers.make 'collide' # On a collision,
 			action = base.actions.make 'give.weapon'

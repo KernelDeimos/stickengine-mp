@@ -9,8 +9,11 @@ BaseEntity = require "./BaseEntity"
 module.exports = class extends BaseEntity
 
 	# @override
-	constructor: (@type, @body, @uuid) ->
-		super @type, @body, @uuid
+	constructor: (type, body, uuid) ->
+		super type, body, uuid
+		type = @type
+		body = @body
+		uuid = @uuid
 
 	# @override
 	update: (deltaT) ->
