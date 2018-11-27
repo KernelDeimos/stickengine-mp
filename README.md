@@ -1,6 +1,8 @@
 # StickEngine Multiplayer
 An unfinished stick figure game/engine.
 
+![Screenshot](/screenshots/1.png?raw=true)
+
 ## Goal
 The goal of this project is to create a web-based stickfigure shooter game
 that is extremely modular by design. This is made possible by websockets,
